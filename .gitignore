@@ -1,0 +1,9 @@
+# Raw prospect teardown source files may contain PII/PHI — keep out of git by default.
+# (Prep docs in calls/*_prep.md are tracked; move real ones out if they hold sensitive data.)
+teardowns/
+calls/teardowns/
+
+# OS / editor cruft
+.DS_Store
+*.swp
+*~
