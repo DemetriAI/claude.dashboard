@@ -2,6 +2,16 @@
 
 Sales operations workspace for **PremierConnect AI** — the done-for-you AI front desk that answers every call and books it.
 
+## `engine/` — the outreach & outcome engine (start here)
+
+The full go-to-market machine: **12 agents** that run research → diagnose pain → Loom → Gamma →
+outreach → book → prove → testimonial → convert. Re-skinnable per vertical by swapping one config
+block. **Open [`engine/README.md`](engine/README.md) — it's the control-center dashboard and always
+tells you where everything is at.** Weekly cadence lives in [`engine/MAINTENANCE.md`](engine/MAINTENANCE.md).
+
+Currently running: **optometry** (42 real targets sourced, pain-gated to 37 PROCEED). The engine feeds
+booked calls straight into the `calls/` system below.
+
 ## `calls/` — discovery-call prep system
 
 Everything needed to walk into a discovery call and close a **14-day free pilot** with a **pre-signed setup-fee + MRR agreement** (charge triggers on pilot → production).
