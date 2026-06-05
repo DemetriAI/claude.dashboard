@@ -27,6 +27,9 @@ Hero (live SMS) → Speed-to-lead pain → Database decay → Cost → **Live da
 - Pricing is the agreed value ladder: **$1,500 setup (all tiers)**; **$1,500 / $1,250 / $1,000** monthly (month-to-month / 6-mo / 12-mo +1 free).
 
 ## Host a shareable link (optional)
-Push the branch and enable **GitHub Pages** (Settings → Pages → deploy from branch, `/demo` folder) for a public URL you can drop into outreach.
+GitHub Pages "deploy from a branch" only serves the repo **root** or **`/docs`** (not arbitrary subfolders), and Pages on a **private** repo needs a paid GitHub plan. Easiest options:
+- **GitHub Pages:** copy these files to `/docs` (or add a Pages Actions workflow), then Settings → Pages → deploy from branch → `/docs`.
+- **Instant public URL:** drag the `demo/` folder onto [Netlify Drop](https://app.netlify.com/drop), or deploy with Vercel.
+- Ask and I'll wire up whichever you prefer.
 
 > Pilot result and benchmark stats are representative figures from the engine appendix — swap in a real client metric as soon as you have one.
