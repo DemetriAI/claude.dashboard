@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="620" viewBox="0 0 920 620" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <rect width="920" height="620" fill="#ffffff"/>
+  <text x="40" y="46" font-size="27" font-weight="700" fill="#0f172a">The $5K Sprint — Teardown &#8594; Launch-Fee Model</text>
+  <text x="40" y="72" font-size="14" fill="#64748b">Base case &#183; all rates est. &#183; 3 launches &#215; $1,800 = $5,400 collected by Day 4</text>
+
+  <!-- Panel A: Funnel -->
+  <text x="40" y="112" font-size="16" font-weight="700" fill="#0f172a">Funnel over 4 days of sending</text>
+
+  <!-- Sends -->
+  <text x="195" y="142" font-size="14" fill="#334155" text-anchor="end">Teardowns sent</text>
+  <rect x="210" y="121" width="520" height="34" rx="4" fill="#2563eb"/>
+  <text x="742" y="143" font-size="14" font-weight="700" fill="#1e293b">60 sent</text>
+
+  <!-- Replies -->
+  <text x="195" y="186" font-size="14" fill="#334155" text-anchor="end">Replies</text>
+  <rect x="210" y="165" width="78" height="34" rx="4" fill="#3b82f6"/>
+  <text x="300" y="187" font-size="14" font-weight="700" fill="#1e293b">9  (15% est.)</text>
+
+  <!-- Calls -->
+  <text x="195" y="230" font-size="14" fill="#334155" text-anchor="end">Calls booked</text>
+  <rect x="210" y="209" width="43" height="34" rx="4" fill="#60a5fa"/>
+  <text x="265" y="231" font-size="14" font-weight="700" fill="#1e293b">5  (55% of replies)</text>
+
+  <!-- Launches -->
+  <text x="195" y="274" font-size="14" fill="#334155" text-anchor="end">Paid launches</text>
+  <rect x="210" y="253" width="28" height="34" rx="4" fill="#22c55e"/>
+  <text x="250" y="275" font-size="14" font-weight="700" fill="#15803d">3  &#8594;  $5,400   (60% of calls)</text>
+
+  <!-- Divider -->
+  <line x1="40" y1="312" x2="880" y2="312" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Panel B: Cumulative cash -->
+  <text x="40" y="344" font-size="16" font-weight="700" fill="#0f172a">Cumulative cash collected</text>
+
+  <!-- gridlines + y labels (baseline y=560, $6k top y=380, scale 180px/6000) -->
+  <line x1="210" y1="560" x2="770" y2="560" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="210" y1="500" x2="770" y2="500" stroke="#eef2f7" stroke-width="1"/>
+  <line x1="210" y1="440" x2="770" y2="440" stroke="#eef2f7" stroke-width="1"/>
+  <line x1="210" y1="380" x2="770" y2="380" stroke="#eef2f7" stroke-width="1"/>
+  <text x="200" y="564" font-size="12" fill="#94a3b8" text-anchor="end">$0</text>
+  <text x="200" y="504" font-size="12" fill="#94a3b8" text-anchor="end">$2k</text>
+  <text x="200" y="444" font-size="12" fill="#94a3b8" text-anchor="end">$4k</text>
+  <text x="200" y="384" font-size="12" fill="#94a3b8" text-anchor="end">$6k</text>
+
+  <!-- $5,000 goal line (y = 560 - 5000/6000*180 = 410) -->
+  <line x1="210" y1="410" x2="770" y2="410" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="765" y="406" font-size="12" font-weight="700" fill="#ef4444" text-anchor="end">$5,000 goal</text>
+
+  <!-- Day 1: $0 -->
+  <text x="265" y="552" font-size="13" font-weight="700" fill="#94a3b8" text-anchor="middle">$0</text>
+  <text x="265" y="582" font-size="13" fill="#475569" text-anchor="middle">Day 1</text>
+
+  <!-- Day 2: $1,800 -> h=54, y=506 -->
+  <rect x="347" y="506" width="56" height="54" rx="3" fill="#3b82f6"/>
+  <text x="375" y="498" font-size="13" font-weight="700" fill="#1e293b" text-anchor="middle">$1.8k</text>
+  <text x="375" y="582" font-size="13" fill="#475569" text-anchor="middle">Day 2</text>
+
+  <!-- Day 3: $3,600 -> h=108, y=452 -->
+  <rect x="457" y="452" width="56" height="108" rx="3" fill="#3b82f6"/>
+  <text x="485" y="444" font-size="13" font-weight="700" fill="#1e293b" text-anchor="middle">$3.6k</text>
+  <text x="485" y="582" font-size="13" fill="#475569" text-anchor="middle">Day 3</text>
+
+  <!-- Day 4: $5,400 -> h=162, y=398 (above goal) -->
+  <rect x="567" y="398" width="56" height="162" rx="3" fill="#22c55e"/>
+  <text x="595" y="390" font-size="13" font-weight="700" fill="#15803d" text-anchor="middle">$5.4k</text>
+  <text x="595" y="582" font-size="13" fill="#475569" text-anchor="middle">Day 4</text>
+
+  <!-- Day 5: $5,400 buffer -->
+  <rect x="677" y="398" width="56" height="162" rx="3" fill="#16a34a"/>
+  <text x="705" y="390" font-size="13" font-weight="700" fill="#15803d" text-anchor="middle">$5.4k</text>
+  <text x="705" y="582" font-size="13" fill="#475569" text-anchor="middle">Day 5</text>
+
+  <text x="595" y="612" font-size="12" fill="#16a34a" text-anchor="middle">&#10003; crosses $5,000 goal on Day 4</text>
+</svg>
