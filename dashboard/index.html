@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PremierConnect AI — Prep-Doc Dashboard</title>
+<style>
+  :root{
+    --bg:#0f1220; --panel:#171a2b; --card:#1d2138; --line:#2b3052;
+    --ink:#e9ecf7; --mut:#9aa3c7; --brand:#6c8cff; --brand2:#8f6bff;
+    --good:#37d399; --warn:#ffcf6b; --bad:#ff7a7a; --chip:#232845;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       background:var(--bg);color:var(--ink)}
+  header{display:flex;align-items:center;gap:14px;padding:14px 22px;border-bottom:1px solid var(--line);
+         background:linear-gradient(90deg,#171a2b,#13162400)}
+  .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--brand2));
+        display:grid;place-items:center;font-weight:800;color:#fff;box-shadow:0 4px 18px #6c8cff44}
+  header h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.2px}
+  header .sub{color:var(--mut);font-size:12px}
+  .wrap{display:grid;grid-template-columns:380px 1fr;gap:0;height:calc(100vh - 63px)}
+  .panel{padding:18px 20px;overflow:auto;border-right:1px solid var(--line);background:var(--panel)}
+  .panel h2{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--mut);margin:4px 0 12px}
+  label{display:block;font-size:12px;color:var(--mut);margin:12px 0 5px;font-weight:600}
+  input,select,textarea{width:100%;background:var(--card);border:1px solid var(--line);color:var(--ink);
+        border-radius:9px;padding:9px 11px;font:inherit;outline:none}
+  input:focus,select:focus,textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px #6c8cff33}
+  textarea{resize:vertical;min-height:54px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .hint{font-size:11px;color:var(--mut);margin-top:5px}
+  .vhint{margin-top:6px;font-size:12px;color:var(--brand)}
+  button{cursor:pointer;border:0;border-radius:9px;padding:10px 14px;font:inherit;font-weight:700}
+  .primary{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;width:100%;margin-top:16px;
+           box-shadow:0 6px 20px #6c8cff33}
+  .primary:hover{filter:brightness(1.07)}
+  .ghost{background:var(--chip);color:var(--ink);border:1px solid var(--line)}
+  .ghost:hover{border-color:var(--brand)}
+  .examples{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+  .chip{background:var(--chip);border:1px solid var(--line);color:var(--ink);border-radius:999px;
+        padding:6px 11px;font-size:12px;font-weight:600}
+  .chip:hover{border-color:var(--brand)}
+  /* right side */
+  .main{display:flex;flex-direction:column;min-width:0;background:var(--bg)}
+  .toolbar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--line)}
+  .tabs{display:flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:3px}
+  .tab{padding:6px 13px;border-radius:7px;font-size:12.5px;font-weight:700;color:var(--mut);background:transparent}
+  .tab.active{background:var(--brand);color:#fff}
+  .spacer{flex:1}
+  .view{flex:1;overflow:auto;padding:26px}
+  .doc{max-width:820px;margin:0 auto;background:#fbfbfe;color:#191b27;border-radius:14px;
+       padding:40px 46px;box-shadow:0 18px 50px #0008}
+  pre.raw{max-width:900px;margin:0 auto;white-space:pre-wrap;word-break:break-word;
+       background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px;color:#cdd4f5;font-size:12.5px}
+  /* document typography */
+  .doc h1{font-size:25px;margin:0 0 14px;letter-spacing:-.01em}
+  .doc h2{font-size:18px;margin:30px 0 10px;padding-bottom:6px;border-bottom:2px solid #ececf6;color:#2a2d44}
+  .doc h3{font-size:15px;margin:18px 0 8px}
+  .doc p{margin:9px 0}
+  .doc strong{color:#15172a}
+  .doc em{color:#3a3d57}
+  .doc a{color:#3b5bdb;text-decoration:none}
+  .doc code{background:#eceaf7;color:#5b3fb0;padding:1px 6px;border-radius:5px;font-size:12.5px}
+  .doc pre.code{background:#14172a;color:#dfe5ff;padding:16px 18px;border-radius:10px;overflow:auto;
+        font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
+  .doc pre.code code{background:none;color:inherit;padding:0}
+  .doc hr{border:0;border-top:1px solid #e6e6f0;margin:22px 0}
+  .doc blockquote{margin:14px 0;padding:11px 16px;background:#f1effb;border-left:4px solid var(--brand2);
+        border-radius:0 9px 9px 0;color:#33304e}
+  .doc table{border-collapse:collapse;width:100%;margin:12px 0;font-size:13px}
+  .doc th,.doc td{border:1px solid #e3e3ef;padding:8px 11px;text-align:left;vertical-align:top}
+  .doc th{background:#f3f2fb;font-weight:700}
+  .doc ul,.doc ol{margin:9px 0;padding-left:22px}
+  .doc li{margin:4px 0}
+  .doc li.task{list-style:none;margin-left:-22px;display:flex;gap:9px;align-items:flex-start}
+  .doc li.task .box{flex:0 0 16px;width:16px;height:16px;border:1.5px solid #b9bad0;border-radius:4px;
+        display:grid;place-items:center;font-size:11px;color:#fff;margin-top:2px}
+  .doc li.task .box.on{background:var(--good);border-color:var(--good)}
+  .doc details{margin:16px 0;background:#f5f4fc;border:1px solid #e6e4f4;border-radius:10px;padding:8px 14px}
+  .doc summary{cursor:pointer;font-weight:700}
+  .empty{display:grid;place-items:center;height:100%;color:var(--mut);text-align:center}
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#101428;border:1px solid var(--line);
+        color:var(--ink);padding:11px 18px;border-radius:10px;box-shadow:0 10px 30px #000a;opacity:0;
+        transition:.25s;pointer-events:none;font-weight:600}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+  .toast.good{border-color:var(--good)} .toast.bad{border-color:var(--bad)}
+  .badge{font-size:11px;color:var(--mut)}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">P</div>
+  <div>
+    <h1>PremierConnect AI · Prep-Doc Dashboard</h1>
+    <div class="sub">Discovery-call prep that closes a 14-day pilot — sign now, pay on conversion.</div>
+  </div>
+  <div class="spacer"></div>
+  <span class="badge" id="apiBadge">●&nbsp;ready</span>
+</header>
+
+<div class="wrap">
+  <!-- LEFT: form -->
+  <section class="panel">
+    <h2>Prospect</h2>
+    <label>Prospect name</label>
+    <input id="prospect" placeholder="Bright Smile Dental">
+
+    <label>Vertical</label>
+    <select id="vertical">
+      <option value="healthcare">Healthcare — Dental / Med Spa / Clinic (HIPAA)</option>
+      <option value="home">Home Services — HVAC / Roofing / Plumbing</option>
+      <option value="legal">Legal / Financial — Law / Accounting / Insurance</option>
+    </select>
+    <div class="vhint" id="vhint"></div>
+
+    <h2 style="margin-top:20px">Offer</h2>
+    <div class="row">
+      <div><label>Setup fee ($)</label><input id="setup" placeholder="1,995"></div>
+      <div><label>MRR ($/mo)</label><input id="mrr" placeholder="797"></div>
+    </div>
+
+    <h2 style="margin-top:20px">Teardown snapshot</h2>
+    <label>Call volume</label>
+    <input id="volume" placeholder="~210 inbound/week">
+    <label>The leak</label>
+    <input id="leak" placeholder="~24% to voicemail (~50/wk); nights & weekends unanswered">
+    <label>No-show / missed-call handling today</label>
+    <input id="noshow" placeholder="manual callbacks; ~18 no-shows/mo, no reminders">
+    <label>Est. monthly revenue leaking</label>
+    <input id="revleak" placeholder="~$12–15K/mo">
+    <div class="row">
+      <div><label>Missed calls / wk (objection)</label><input id="missed" placeholder="50"></div>
+      <div><label>Day-12 conversion date</label><input id="day12" placeholder="2026-06-19"></div>
+    </div>
+    <label>Hook line (their words)</label>
+    <textarea id="hook" placeholder="We lose patients every lunch hour and we know it."></textarea>
+    <div class="row">
+      <div><label>Closer</label><input id="closer" placeholder="Alex Reyes"></div>
+      <div><label>Teardown ref</label><input id="teardownRef" placeholder="teardowns/bright-smile.pdf"></div>
+    </div>
+
+    <button class="primary" id="genBtn">Generate prep doc</button>
+
+    <h2 style="margin-top:22px">Worked examples</h2>
+    <div class="examples" id="examples"><span class="hint">loading…</span></div>
+  </section>
+
+  <!-- RIGHT: preview -->
+  <section class="main">
+    <div class="toolbar">
+      <div class="tabs">
+        <div class="tab active" data-tab="preview">Preview</div>
+        <div class="tab" data-tab="md">Markdown</div>
+      </div>
+      <span class="badge" id="docName"></span>
+      <div class="spacer"></div>
+      <button class="ghost" id="copyBtn">Copy</button>
+      <button class="ghost" id="dlBtn">Download .md</button>
+      <button class="ghost" id="saveBtn">Save to calls/</button>
+    </div>
+    <div class="view">
+      <div id="preview" class="doc"></div>
+      <pre id="raw" class="raw" style="display:none"></pre>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const FIELD_IDS = ["prospect","vertical","setup","mrr","volume","leak","noshow","revleak","missed","day12","hook","closer","teardownRef"];
+const VHINTS = {
+  healthcare:"Objection handling leads with BAA credibility (HIPAA).",
+  home:"Compliance maps to data ownership + NDA (no PHI).",
+  legal:"Compliance maps to confidentiality / privilege + NDA."
+};
+let baseMd = "";      // raw doc from server (vertical filled, [[FILL]] intact)
+let currentMd = "";   // after fills applied
+let currentSlug = "";
+
+function fields(){ const f={}; for(const id of FIELD_IDS) f[id]=$(id).value; return f; }
+
+function toast(msg, kind){ const t=$("toast"); t.textContent=msg; t.className="toast show "+(kind||""); setTimeout(()=>t.className="toast",1900); }
+
+/* ---- fill the [[FILL]] placeholders from the form ---- */
+function applyFills(md, f){
+  const setup = f.setup.trim() ? "$"+f.setup.trim() : "$[[FILL]]";
+  const mrr   = f.mrr.trim()   ? "$"+f.mrr.trim()   : "$[[FILL]]";
+  const pairs = [
+    ["[[FILL: your name]]", f.closer],
+    ["[[FILL: link/path to their teardown]]", f.teardownRef],
+    ["[[FILL: ~__ inbound/week]]", f.volume],
+    ["[[FILL: __% to voicemail / __ missed calls per week / after-hours = dead]]", f.leak],
+    ["[[FILL: manual / none / front desk overwhelmed]]", f.noshow],
+    ["[[FILL: missed calls × close rate × value]]", f.revleak],
+    ["[[FILL: quote or observation from teardown]]", f.hook],
+    ["[[FILL: missed calls]]", f.missed],
+    ["[[FILL: day-12 date]]", f.day12],
+  ];
+  let out = md;
+  for(const [k,v] of pairs){ if(v && v.trim()) out = out.split(k).join(v.trim()); }
+  out = out.split("Setup fee $[[FILL]] + $[[FILL]]/mo").join(`Setup fee ${setup} + ${mrr}/mo`);
+  out = out.split("setup fee at **$[[FILL]]**").join(`setup fee at **${setup}**`);
+  out = out.split("monthly at **$[[FILL]]/mo**").join(`monthly at **${mrr}/mo**`);
+  out = out.split("price locked: $[[FILL]] setup + $[[FILL]]/mo").join(`price locked: ${setup} setup + ${mrr}/mo`);
+  if(f.day12 && f.day12.trim()) out = out.split("(date: [[FILL]])").join(`(date: ${f.day12.trim()})`);
+  return out;
+}
+
+/* ---- tiny markdown renderer (covers the constructs these docs use) ---- */
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function inline(s){
+  s = s.replace(/`([^`]+)`/g,(m,a)=>`<code>${a}</code>`);
+  s = s.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>");
+  s = s.replace(/(^|[^*])\*([^*\n]+)\*/g,"$1<em>$2</em>");
+  s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+  return s;
+}
+function mdToHtml(md){
+  const L = md.replace(/\r/g,"").split("\n");
+  let html="", i=0;
+  while(i<L.length){
+    const line=L[i];
+    if(/^\s*<\/?(details|summary)/.test(line)){ html+=line+"\n"; i++; continue; }
+    if(/^```/.test(line)){ let b=[]; i++; while(i<L.length&&!/^```/.test(L[i])){b.push(esc(L[i]));i++;} i++;
+      html+=`<pre class="code"><code>${b.join("\n")}</code></pre>\n`; continue; }
+    if(/^\s*\|/.test(line) && i+1<L.length && /-/.test(L[i+1]) && /^\s*\|?[\s:|-]+\|?\s*$/.test(L[i+1])){
+      const row=r=>r.trim().replace(/^\|/,"").replace(/\|$/,"").split("|").map(c=>c.trim());
+      const head=row(line); i+=2; let rows=[];
+      while(i<L.length && /^\s*\|/.test(L[i])){ rows.push(row(L[i])); i++; }
+      html+="<table><thead><tr>"+head.map(c=>`<th>${inline(esc(c))}</th>`).join("")+"</tr></thead><tbody>"+
+            rows.map(r=>"<tr>"+r.map(c=>`<td>${inline(esc(c))}</td>`).join("")+"</tr>").join("")+"</tbody></table>\n";
+      continue;
+    }
+    if(/^---+\s*$/.test(line)){ html+="<hr>\n"; i++; continue; }
+    const h=line.match(/^(#{1,6})\s+(.*)$/);
+    if(h){ html+=`<h${h[1].length}>${inline(esc(h[2]))}</h${h[1].length}>\n`; i++; continue; }
+    if(/^\s*>/.test(line)){ let b=[]; while(i<L.length&&/^\s*>/.test(L[i])){b.push(L[i].replace(/^\s*>\s?/,""));i++;}
+      html+=`<blockquote>${inline(esc(b.join(" ")))}</blockquote>\n`; continue; }
+    if(/^\s*([-*]|\d+\.)\s+/.test(line)){
+      const ordered=/^\s*\d+\.\s+/.test(line); let items=[];
+      while(i<L.length && /^\s*([-*]|\d+\.)\s+/.test(L[i])){
+        let it=L[i].replace(/^\s*([-*]|\d+\.)\s+/,"");
+        const tm=it.match(/^\[([ xX])\]\s+(.*)$/);
+        if(tm){ const on=tm[1].toLowerCase()==="x";
+          items.push(`<li class="task"><span class="box ${on?"on":""}">${on?"✓":""}</span><span>${inline(esc(tm[2]))}</span></li>`);
+        } else items.push(`<li>${inline(esc(it))}</li>`);
+        i++;
+      }
+      html+=(ordered?"<ol>":"<ul>")+items.join("")+(ordered?"</ol>":"</ul>")+"\n"; continue;
+    }
+    if(/^\s*$/.test(line)){ i++; continue; }
+    let b=[line]; i++;
+    while(i<L.length && !/^\s*$/.test(L[i]) && !/^(#{1,6}\s|>|\s*\||```|---+\s*$|\s*([-*]|\d+\.)\s)/.test(L[i]) && !/^\s*<\/?(details|summary)/.test(L[i])){ b.push(L[i]); i++; }
+    html+=`<p>${inline(esc(b.join(" ")))}</p>\n`;
+  }
+  return html;
+}
+
+function render(){
+  currentMd = baseMd ? applyFills(baseMd, fields()) : "";
+  $("preview").innerHTML = currentMd ? mdToHtml(currentMd)
+      : '<div class="empty">Fill the form and hit <b>&nbsp;Generate prep doc</b>.</div>';
+  $("raw").textContent = currentMd;
+  $("docName").textContent = currentSlug ? currentSlug+"_prep.md" : "";
+}
+
+async function generate(){
+  const prospect=$("prospect").value.trim(), vertical=$("vertical").value;
+  if(!prospect){ toast("Enter a prospect name","bad"); return; }
+  $("genBtn").textContent="Generating…";
+  try{
+    const r=await fetch("/api/generate",{method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({prospect,vertical})});
+    const j=await r.json();
+    if(!r.ok) throw new Error(j.error||"failed");
+    baseMd=j.markdown; currentSlug=j.slug; render();
+  }catch(e){ toast("Generate failed: "+e.message,"bad"); }
+  $("genBtn").textContent="Generate prep doc";
+}
+
+async function loadExamples(){
+  try{
+    const j=await (await fetch("/api/examples")).json();
+    const box=$("examples"); box.innerHTML="";
+    if(!j.examples.length){ box.innerHTML='<span class="hint">none yet</span>'; return; }
+    for(const ex of j.examples){
+      const b=document.createElement("button"); b.className="chip"; b.textContent=ex.title;
+      b.onclick=async()=>{ const d=await (await fetch("/api/example?slug="+encodeURIComponent(ex.slug))).json();
+        baseMd=d.markdown; currentSlug=d.slug; render(); $("tabPreview").click?.(); toast("Loaded "+ex.slug); };
+      box.appendChild(b);
+    }
+  }catch(e){ $("examples").innerHTML='<span class="hint">examples unavailable</span>'; }
+}
+
+/* wiring */
+$("genBtn").onclick=generate;
+$("vertical").onchange=()=>{ $("vhint").textContent=VHINTS[$("vertical").value]; generate(); };
+$("prospect").addEventListener("change",generate);
+for(const id of FIELD_IDS){ if(id!=="prospect"&&id!=="vertical") $(id).addEventListener("input",render); }
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active")); t.classList.add("active");
+  const md=t.dataset.tab==="md"; $("preview").style.display=md?"none":""; $("raw").style.display=md?"":"none";
+});
+$("copyBtn").onclick=()=>{ if(!currentMd)return; navigator.clipboard.writeText(currentMd).then(()=>toast("Copied markdown","good")); };
+$("dlBtn").onclick=()=>{ if(!currentMd)return; const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([currentMd],{type:"text/markdown"})); a.download=(currentSlug||"prospect")+"_prep.md"; a.click(); };
+$("saveBtn").onclick=async()=>{ if(!currentMd){toast("Nothing to save","bad");return;}
+  const r=await fetch("/api/save",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({slug:currentSlug,markdown:currentMd})});
+  const j=await r.json(); r.ok?toast("Saved "+j.path,"good"):toast("Save failed: "+(j.error||""),"bad"); };
+
+/* demo defaults so the dashboard opens with a full doc */
+function prefill(){
+  const d={prospect:"Bright Smile Dental",vertical:"healthcare",setup:"1,995",mrr:"797",
+    volume:"~210 inbound/week",leak:"~24% to voicemail (~50/wk); nights & weekends unanswered",
+    noshow:"manual callbacks; ~18 no-shows/mo, no reminders",revleak:"~$12–15K/mo",
+    missed:"50 calls/week",day12:"2026-06-19",
+    hook:"We lose patients every lunch hour and we know it.",closer:"Alex Reyes",
+    teardownRef:"teardowns/bright-smile-dental.pdf"};
+  for(const k in d) $(k).value=d[k];
+  $("vhint").textContent=VHINTS[d.vertical];
+}
+prefill(); loadExamples(); generate();
+</script>
+</body>
+</html>

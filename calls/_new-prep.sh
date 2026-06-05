@@ -29,7 +29,11 @@ EOF
   exit 1
 }
 
-prospect="${1:-}"; vertical="${2:-}"; flag="${3:-}"
+prospect="${1:-}"; vertical="${2:-}"
+force=0; stdout=0
+for a in "${@:3}"; do
+  case "$a" in --force) force=1;; --stdout) stdout=1;; esac
+done
 [[ -z "$prospect" || -z "$vertical" ]] && usage
 [[ -f "$template" ]] || { echo "Template not found: $template" >&2; exit 1; }
 
@@ -69,7 +73,6 @@ esac
 
 slug="$(printf '%s' "$prospect" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-' | sed 's/^-//;s/-$//')"
 out="$here/${slug}_prep.md"
-[[ -e "$out" && "$flag" != "--force" ]] && { echo "Refusing to overwrite $out (use --force)" >&2; exit 1; }
 
 today="$(date +%F)"
 content="$(cat "$template")"
@@ -92,6 +95,12 @@ replace '{{DREAM}}'                 "$dream"
 replace '{{CASE_STUDY}}'            "$case_study"
 replace '{{COMPLIANCE_OBJECTION}}'  "$compliance"
 
+if [[ "$stdout" -eq 1 ]]; then
+  printf '%s\n' "$content"
+  exit 0
+fi
+
+[[ -e "$out" && "$force" -ne 1 ]] && { echo "Refusing to overwrite $out (use --force)" >&2; exit 1; }
 printf '%s\n' "$content" > "$out"
 echo "Created $out"
 echo "Next: replace every [[FILL: ...]] from ${prospect}'s teardown, then run the VERIFY checklist at the bottom."
