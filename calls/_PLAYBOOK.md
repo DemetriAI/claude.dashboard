@@ -25,10 +25,13 @@ Why it works (the psychology):
 | **Healthcare** | appointments (chairs/providers) | ~$450/visit, $1,200+ LTV | **Lead with the BAA** — it's a trust accelerant |
 | **Home services** | jobs (dispatch) | $350 call / $8K+ install | Data is theirs, NDA on request, BAA-ready infra |
 | **Legal / financial** | consults / matters | $3,500+ signed matter | Confidentiality / privilege, NDA up front |
+| **Real estate** | leads → showings / listing appts | $7,500+ commission/side | **TCPA consent + opt-outs** — texting compliance is the trust story |
+
+> **Real estate runs on two leaks, not one** — speed-to-lead (the obvious sale) *and* a cold past-client database (the quieter, bigger money: ~82% of deals are repeat/referral, but most agents capture a fraction of that). Open the teardown with speed; differentiate and expand the deal with database reactivation. Compliance angle is **TCPA** — only text leads who opted in or reached out first, and honor opt-outs automatically. With no HIPAA/BAA to clear, it's the fastest build to stand up.
 
 ## Generate a new prep doc
 ```bash
-./calls/_new-prep.sh "Prospect Name" healthcare   # or: home | legal
+./calls/_new-prep.sh "Prospect Name" healthcare   # or: home | legal | realestate
 ```
 Then open `./calls/{prospect}_prep.md` and replace every `[[FILL: ...]]` with real teardown numbers and your pricing. Run the **VERIFY** checklist at the bottom before the call.
 

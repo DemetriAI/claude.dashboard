@@ -15,7 +15,7 @@ Everything needed to walk into a discovery call and close a **14-day free pilot*
 
 ### Quick start
 ```bash
-# Generate a prep doc for a new prospect (vertical = healthcare | home | legal)
+# Generate a prep doc for a new prospect (vertical = healthcare | home | legal | realestate)
 ./calls/_new-prep.sh "Bright Smile Dental" healthcare
 
 # Open the result, replace every [[FILL: ...]] from their teardown, run VERIFY.
@@ -25,5 +25,6 @@ Everything needed to walk into a discovery call and close a **14-day free pilot*
 - [`calls/bright-smile-dental_prep.md`](calls/bright-smile-dental_prep.md) — Healthcare (HIPAA, leads with BAA)
 - [`calls/summit-air_prep.md`](calls/summit-air_prep.md) — Home services (HVAC)
 - [`calls/hartwell-law_prep.md`](calls/hartwell-law_prep.md) — Legal (personal-injury intake)
+- [`calls/rivera-realty_prep.md`](calls/rivera-realty_prep.md) — Real estate (solo agent; TCPA consent angle, dual speed-to-lead + database pain)
 
 Every prep doc covers, and self-verifies: **(1)** 5 qualification questions · **(2)** Hormozi value framing · **(3)** pilot close with *signed-agreement-before-pilot* mechanic · **(4)** objection handling (incl. compliance/BAA) · **(5)** day-12 conversion-call lock.

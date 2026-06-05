@@ -2,7 +2,7 @@
 #
 # _new-prep.sh — spin up a discovery-call prep doc from the master template.
 #
-#   ./calls/_new-prep.sh "Prospect Name" <healthcare|home|legal> [--force]
+#   ./calls/_new-prep.sh "Prospect Name" <healthcare|home|legal|realestate> [--force]
 #
 # Fills the vertical-specific {{TOKENS}} and writes ./calls/{slug}_prep.md.
 # Then open the file and replace every [[FILL: ...]] from the teardown.
@@ -20,11 +20,13 @@ Usage: _new-prep.sh "Prospect Name" <vertical> [--force]
     healthcare   Dental / med spa / clinic        (HIPAA -> leads with BAA)
     home         HVAC / roofing / plumbing        (data ownership / NDA)
     legal        Law / accounting / insurance     (confidentiality / privilege)
+    realestate   Solo agent / small team          (TCPA consent + honor opt-outs)
 
 Examples:
   _new-prep.sh "Bright Smile Dental" healthcare
   _new-prep.sh "Summit Air" home
   _new-prep.sh "Hartwell Law" legal
+  _new-prep.sh "Rivera Realty" realestate
 EOF
   exit 1
 }
@@ -63,6 +65,16 @@ case "$vertical" in
     dream="Every potential client who calls gets captured and booked for a consult — no signed case ever lost to a voicemail or a missed callback."
     case_study="a personal-injury firm captured 18 intake calls in the pilot → 7 consults booked → 2 signed cases."
     compliance=$'**"What about client confidentiality / privilege?"**\n- **Acknowledge + flip:** "Exactly the right question for a firm — confidentiality is the whole game."\n- **Evidence:** "Caller and matter information is handled strictly confidentially — encrypted, access-logged — and we sign an NDA / confidentiality agreement up front. Our infrastructure is healthcare-grade (BAA-ready), so it\047s built for privileged data."\n- **Re-close:** "Confidentiality\047s covered in writing. The exposure today is intake calls hitting voicemail and walking to the firm down the street — shall we stop that?"'
+    ;;
+  realestate|real_estate|real-estate|realty|realtor|property)
+    v_label="Real Estate — Solo Agent / Small Team"
+    customer="client";       customers="clients"
+    unit="appointment";      units="appointments"
+    calendar="showing calendar"
+    value_per_unit="\$7,500+ commission per closed side (lead → appointment → close)"
+    dream="Every inbound lead answered in under 60 seconds, 24/7 — no buyer lost to the agent who replied first — and your past-client database nurtured on autopilot, so repeat and referral deals keep coming back to you."
+    case_study="a solo agent recovered 14 after-hours inquiries in the pilot → 6 showings booked → 2 signed buyers (~\$15K in commission), while the reactivation cadence re-woke 40+ past clients."
+    compliance=$'**"Is texting my leads and clients even legal — what about TCPA / spam rules?"** — *(Lead with TCPA credibility. Like the BAA question in healthcare, this is a buying signal — it means they guard their reputation. Treat it as a trust accelerant, not a hurdle.)*\n- **Acknowledge + flip to authority:** "Great question — and the fact that you ask it tells me you protect your name in this market. Compliance is the *first* thing we build in, not the last."\n- **Evidence:** "Every message runs on a **TCPA-compliant** framework: we text only leads who opted in or contacted you first, every send carries clear opt-out language, and opt-outs are honored automatically and logged. Your contact data stays yours — encrypted, never sold or shared — and we\047ll sign an NDA on request. No HIPAA or BAA hoops here either, so we\047re live *faster* than a medical build."\n- **Re-close:** "So compliance is handled and on the record — the thing actually costing you is leads going cold before you can reply. Want me to bake the consent + opt-out flow right into the agreement we sign today?"'
     ;;
   *) echo "Unknown vertical: $vertical" >&2; usage;;
 esac
