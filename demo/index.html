@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PremierConnect AI — Live Demo · Real Estate</title>
+<meta name="description" content="Done-for-you AI front desk for real estate agents: answer every lead in 60 seconds and reactivate your database on autopilot." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- Fixed chrome -->
+<header class="chrome">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span class="brand-name">PremierConnect&nbsp;AI</span>
+  </div>
+  <a class="btn btn-ghost" href="#cta">Book 15&nbsp;min →</a>
+</header>
+
+<nav class="dots" id="dots" aria-label="Section navigation"></nav>
+<div class="scroll-hint" id="scrollHint">Scroll&nbsp;/&nbsp;press&nbsp;→ <span>⌄</span></div>
+
+<main id="deck">
+
+  <!-- 1 · HERO -->
+  <section class="slide hero" data-label="Start">
+    <div class="hero-grid">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">AI FRONT DESK FOR REAL ESTATE</p>
+        <h1>Answer every lead in <span class="grad">60 seconds.</span><br />Reawaken your <span class="grad2">database</span> on autopilot.</h1>
+        <p class="lede">8 in 10 agents lose deals two ways: slow replies and a cold past-client list. We plug both — done-for-you — and prove it on your own phones in 14 days.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#cta">Start the free 14-day pilot</a>
+          <a class="btn btn-ghost" href="#dashboard">See it live ↓</a>
+        </div>
+        <div class="hero-trust">
+          <span>⚡ &lt;60s response, 24/7</span><span>🔁 Database reactivation</span><span>🛡️ TCPA-compliant</span>
+        </div>
+      </div>
+
+      <!-- Live phone mock -->
+      <div class="hero-phone reveal">
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="sms-head">
+              <div class="sms-avatar">RR</div>
+              <div>
+                <div class="sms-name">Rivera Realty · AI Assistant</div>
+                <div class="sms-status"><span class="live-dot"></span>active now</div>
+              </div>
+              <div class="sms-timer" id="heroTimer">0:00</div>
+            </div>
+            <div class="sms-body" id="heroThread"></div>
+          </div>
+        </div>
+        <div class="phone-glow"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · PAIN 1 -->
+  <section class="slide" data-label="Speed-to-lead">
+    <div class="wrap reveal">
+      <p class="eyebrow warn">PAIN #1 · THE SPEED-TO-LEAD GAP</p>
+      <h2>The first agent to reply usually wins. Most agents aren't first.</h2>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-num"><span data-count="78" data-suffix="%">0</span></div><div class="stat-cap">of buyers hire the <b>first agent</b> to respond</div></div>
+        <div class="stat"><div class="stat-num"><span data-count="15" data-suffix="+ hrs">0</span></div><div class="stat-cap">average agent's <b>response time</b></div></div>
+        <div class="stat"><div class="stat-num"><span data-count="48" data-suffix="%">0</span></div><div class="stat-cap">of inquiries get <b>no reply at all</b></div></div>
+        <div class="stat"><div class="stat-num"><span data-count="62" data-suffix="%">0</span></div><div class="stat-cap">of leads come in <b>after-hours</b></div></div>
+      </div>
+      <p class="undertext">A 5-minute response makes a lead <b>21× more likely to qualify.</b> Every slow reply is a commission walking to whoever picked up first.</p>
+    </div>
+  </section>
+
+  <!-- 3 · PAIN 2 -->
+  <section class="slide" data-label="Database">
+    <div class="wrap reveal">
+      <p class="eyebrow warn">PAIN #2 · YOUR DATABASE IS GOING COLD</p>
+      <h2>The quieter, bigger money: the clients you already earned.</h2>
+      <div class="bar-compare">
+        <div class="bar-block">
+          <div class="bar-label"><b>82%</b> of deals are repeat&nbsp;+&nbsp;referral</div>
+          <div class="bar"><div class="bar-fill" data-fill="82"></div></div>
+        </div>
+        <div class="bar-block">
+          <div class="bar-label"><b>&lt;15%</b> of past clients actually return</div>
+          <div class="bar"><div class="bar-fill thin" data-fill="15"></div></div>
+        </div>
+      </div>
+      <p class="undertext"><b>88%</b> of past clients say they'd use their agent again — but go elsewhere because of silence after closing. The median agent leaves <b>~10 sales a year</b> on the table by not staying in touch.</p>
+    </div>
+  </section>
+
+  <!-- 4 · COST -->
+  <section class="slide cost" data-label="The cost">
+    <div class="wrap reveal center">
+      <p class="eyebrow">THE COST OF DOING NOTHING</p>
+      <div class="odometer">$<span data-count="30000" data-comma="1">0</span><span class="plus">+</span></div>
+      <p class="odo-cap">walking out the door <b>every year</b></p>
+      <div class="cost-pills">
+        <span class="pill">~$7,500 lost per missed lead</span>
+        <span class="pill">several repeat/referral deals never asked for</span>
+        <span class="pill">$6k–$12k/yr chasing cold portal leads</span>
+      </div>
+      <p class="undertext">This isn't a future cost. You're paying it right now — to no one.</p>
+    </div>
+  </section>
+
+  <!-- 5 · LIVE DASHBOARD -->
+  <section class="slide dash-slide" id="dashboard" data-label="Live demo">
+    <div class="wrap reveal">
+      <p class="eyebrow">THE PRODUCT · LIVE</p>
+      <h2 class="dash-title">This is what's running while you show houses.</h2>
+
+      <div class="dashboard">
+        <div class="dash-head">
+          <div class="brand small"><span class="brand-mark" aria-hidden="true"></span><span class="brand-name">PremierConnect&nbsp;AI</span></div>
+          <div class="dash-live"><span class="live-dot"></span>Live · answering now</div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="kpis">
+          <div class="kpi"><div class="kpi-label">Leads answered today</div><div class="kpi-val"><span data-count="37">0</span></div><div class="kpi-trend up">100% answered</div></div>
+          <div class="kpi"><div class="kpi-label">Avg. response time</div><div class="kpi-val"><span class="green">0:41</span></div><div class="kpi-trend up">vs 15+ hrs industry</div></div>
+          <div class="kpi"><div class="kpi-label">Showings booked</div><div class="kpi-val"><span data-count="9">0</span></div><div class="kpi-trend up">this week</div></div>
+          <div class="kpi"><div class="kpi-label">Revenue recovered</div><div class="kpi-val gold">$<span id="revenue" data-count="22500" data-comma="1">0</span></div><div class="kpi-trend up">+1 closing pending</div></div>
+        </div>
+
+        <div class="dash-grid">
+          <!-- Lead feed -->
+          <div class="panel">
+            <div class="panel-head"><span>Incoming leads</span><span class="panel-tag">auto-answered</span></div>
+            <ul class="feed" id="leadFeed"></ul>
+          </div>
+
+          <!-- Right column -->
+          <div class="dash-col">
+            <div class="panel">
+              <div class="panel-head"><span>Database reactivation</span><span class="panel-tag gold">40+ re-engaged</span></div>
+              <ul class="feed compact" id="dbFeed"></ul>
+            </div>
+            <div class="panel phone-panel">
+              <div class="panel-head"><span>Live conversation</span><span class="panel-tag">SMS · TCPA opt-in</span></div>
+              <div class="mini-thread" id="dashThread"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · WORKFLOWS -->
+  <section class="slide" data-label="How it works">
+    <div class="wrap reveal">
+      <p class="eyebrow">DONE-FOR-YOU · WE BUILD &amp; RUN IT</p>
+      <h2>Four workflows. Zero lifting from you.</h2>
+      <div class="cards">
+        <div class="card"><div class="card-ic">⚡</div><h3>Speed-to-Lead Instant Response</h3><p>AI answers every call &amp; web form in under 60 seconds, 24/7. No lead waits till morning. Ever.</p></div>
+        <div class="card hot"><div class="card-ic">🔁</div><h3>Database Reactivation Cadence</h3><p>Systematic, consent-based touches to your sphere &amp; past clients — so repeat and referral deals come back to you.</p></div>
+        <div class="card"><div class="card-ic">📅</div><h3>Showing &amp; Appt Confirmation</h3><p>Confirm and reschedule automatically. Cut no-shows before they cost you a Saturday.</p></div>
+        <div class="card"><div class="card-ic">⭐</div><h3>Post-Closing Review + Referral</h3><p>Trigger a review and a referral ask at close — feeding the repeat/referral engine.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · COMPLIANCE -->
+  <section class="slide" data-label="Compliance">
+    <div class="wrap reveal center">
+      <p class="eyebrow">BUILT FOR COMPLIANCE — AND SPEED</p>
+      <h2>Compliant by design. Live faster than anyone.</h2>
+      <div class="badges">
+        <div class="badge"><div class="badge-ic">🛡️</div><b>TCPA-compliant</b><span>We text only opted-in / inbound leads. Clear opt-out on every message, honored automatically &amp; logged.</span></div>
+        <div class="badge"><div class="badge-ic">🔒</div><b>Your data stays yours</b><span>Encrypted, never sold or shared. NDA on request.</span></div>
+        <div class="badge"><div class="badge-ic">🚀</div><b>Fastest build</b><span>No HIPAA/BAA red tape in real estate — live in 14 days.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · PROOF -->
+  <section class="slide" data-label="Proof">
+    <div class="wrap reveal center">
+      <p class="eyebrow">RESULTS INSIDE 30 DAYS</p>
+      <h2>What a single solo agent saw in the pilot window.</h2>
+      <div class="flow">
+        <div class="flow-step"><div class="flow-num"><span data-count="14">0</span></div><div class="flow-cap">after-hours inquiries recovered</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num"><span data-count="6">0</span></div><div class="flow-cap">showings booked</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="flow-num"><span data-count="2">0</span></div><div class="flow-cap">signed buyers</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step hot"><div class="flow-num gold">$<span data-count="15000" data-comma="1">0</span></div><div class="flow-cap">in commission</div></div>
+      </div>
+      <p class="undertext">Plus <b>40+ past clients re-engaged</b> by the reactivation cadence — live in 14 days. <span class="tiny">Representative pilot result.</span></p>
+    </div>
+  </section>
+
+  <!-- 9 · PRICING -->
+  <section class="slide pricing-slide" data-label="Pricing">
+    <div class="wrap reveal">
+      <p class="eyebrow">PRICING · CHOOSE YOUR COMMITMENT</p>
+      <h2>One setup fee. Commit longer, pay less.</h2>
+      <p class="setup-note">One-time setup / installment fee: <b>$1,500</b> — identical on every plan.</p>
+      <div class="tiers">
+        <div class="tier">
+          <div class="tier-name">Month-to-Month</div>
+          <div class="tier-price">$1,500<span>/mo</span></div>
+          <div class="tier-sub">Cancel anytime</div>
+          <ul><li>+ $1,500 one-time setup</li><li>Maximum flexibility</li><li>Full system, no lock-in</li></ul>
+        </div>
+        <div class="tier">
+          <div class="tier-name">6-Month</div>
+          <div class="tier-price">$1,250<span>/mo</span></div>
+          <div class="tier-sub">Save $250/mo</div>
+          <ul><li>+ $1,500 one-time setup</li><li>Committed momentum</li><li>Lower monthly rate</li></ul>
+        </div>
+        <div class="tier best">
+          <div class="tier-flag">BEST VALUE</div>
+          <div class="tier-name">12-Month <span class="free">+1 FREE</span></div>
+          <div class="tier-price">$1,000<span>/mo</span></div>
+          <div class="tier-sub">13 months — billed for 12</div>
+          <ul><li>+ $1,500 one-time setup</li><li>Lowest rate + a free month</li><li>Best ROI as the database compounds</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · CTA -->
+  <section class="slide cta-slide" id="cta" data-label="Get started">
+    <div class="wrap reveal center">
+      <p class="eyebrow">LET'S PLUG THE LEAK THIS WEEK</p>
+      <h2 class="cta-h">One recovered lead pays for ~6 months.<br /><span class="grad">The pilot is free.</span></h2>
+      <p class="lede center-lede">Sign today to lock your price — we build immediately, and you pay nothing until it converts to production on your own phones.</p>
+      <div class="hero-cta center">
+        <a class="btn btn-primary big" href="mailto:contact@premierconnectai.com?subject=Book%20my%2015-minute%20PremierConnect%20AI%20setup%20call">Book your 15-minute call</a>
+      </div>
+      <p class="cta-contact">contact@premierconnectai.com</p>
+      <p class="undertext">Stop letting leads — and past clients — go cold.</p>
+    </div>
+  </section>
+
+</main>
+
+<noscript><p style="text-align:center;padding:2rem;color:#9fb0d0">This interactive demo needs JavaScript enabled.</p></noscript>
+<script src="app.js"></script>
+</body>
+</html>
