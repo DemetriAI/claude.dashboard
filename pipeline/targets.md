@@ -20,6 +20,7 @@
 | McNeel Eye Center | Boise, ID | verify | ⏳ QUEUED | McNeel Eye Center — 3 silent front-desk leaks (~$150K/yr est.) \| 1:50 |
 | Idaho Eyecare Center | Boise, ID | verify | ⏳ QUEUED | Idaho Eyecare — 3 silent front-desk leaks (~$150K/yr est.) \| 1:50 |
 | Boise Vision Care | Boise, ID | verify | ⏳ QUEUED | Boise Vision Care — 3 silent front-desk leaks (~$150K/yr est.) \| 1:50 |
+| Eyecare Associates of Boise | Boise, ID | verify | ⏳ QUEUED | Eyecare Associates of Boise — 3 front-desk leaks (~$150K/yr est.) \| 1:50 |
 | Vision Institute Northwest | Spokane, WA | verify | ⏳ QUEUED | Vision Institute NW — 3 front-desk leaks (~$150K/yr est.) \| 1:50 |
 | Pacific Eyecare & Optical | Spokane, WA | verify | ⏳ QUEUED | Pacific Eyecare — 3 front-desk leaks (~$140K/yr est.) \| 1:50 |
 | Colorado Optometry | Fort Collins, CO | verify | ⏳ QUEUED | Colorado Optometry — 3 front-desk leaks (~$150K/yr est.) \| 1:50 |

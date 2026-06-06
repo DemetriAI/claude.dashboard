@@ -1,0 +1,43 @@
+name: Refresh outreach pipeline (scheduled)
+
+# The "24/7 gathering" job. Runs every 6 hours, refreshes the target data,
+# and commits it so the dashboard updates itself. It NO-OPS cleanly until you
+# add the APOLLO_API_KEY secret (Settings → Secrets and variables → Actions).
+#
+# IMPORTANT: GitHub only runs scheduled workflows from the repository's DEFAULT
+# branch. Merge this file to your default branch or the cron will not fire.
+# It never sends outreach — see the human-review gate in DEPLOY.md.
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # every 6 hours
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    env:
+      APOLLO_API_KEY: ${{ secrets.APOLLO_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run pipeline refresh (no-ops without credentials)
+        run: node scripts/generate-teardown.mjs
+
+      - name: Commit any data changes
+        run: |
+          git config user.name "pipeline-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: scheduled pipeline refresh [skip ci]"
+            git push
+          fi

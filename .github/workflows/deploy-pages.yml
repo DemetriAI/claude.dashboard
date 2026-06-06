@@ -1,0 +1,43 @@
+name: Deploy dashboard (GitHub Pages)
+
+# Publishes /site to GitHub Pages. To go live: repo Settings → Pages →
+# Build and deployment → Source: "GitHub Actions". Then set your domain in
+# site/CNAME and add DNS (see DEPLOY.md). This is what puts the dashboard on
+# a real URL instead of localhost.
+
+on:
+  push:
+    branches: ["claude/happy-rubin-4whWC", "main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bundle teardowns + pipeline + plan into the site
+        run: |
+          mkdir -p site/teardowns site/pipeline site/plan
+          cp -r teardowns/* site/teardowns/ 2>/dev/null || true
+          cp -r pipeline/* site/pipeline/ 2>/dev/null || true
+          cp -r plan/*     site/plan/     2>/dev/null || true
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4
