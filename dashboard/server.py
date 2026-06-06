@@ -14,11 +14,16 @@ Endpoints:
     GET  /api/examples          -> [{slug, title, vertical}]
     GET  /api/example?slug=...   -> {markdown, slug}
     POST /api/save              {slug, markdown}     -> {ok, path}
+    POST /api/parse_teardown    {text}               -> {prospect, vertical, leak, ...}
+    POST /api/prep              {text, overrides}    -> {ok, slug, path, fields, markdown}
+    POST /api/drive_pull        {ref}                -> {text, fields}   (link-viewable Drive files)
 """
 import json
 import os
 import re
 import subprocess
+import urllib.request
+import urllib.error
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
@@ -75,14 +80,20 @@ def list_examples():
 
 
 def _first_sentence(text, needles):
+    """Pick the best sentence for a field. `needles` are tried in PRIORITY order
+    (strongest signal first), each matched against markdown-stripped text."""
+    sents = []
     for line in text.splitlines():
         if line.strip().startswith("#"):    # skip section headings
             continue
         for f in re.split(r"(?<=[.!?])\s+", line):
-            if any(n in f.lower() for n in needles):
-                s = re.sub(r"\s+", " ", re.sub(r"[#*_`>\[\]]", "", f)).strip(" -:\t")
-                if 12 <= len(s) <= 220:
-                    return s
+            s = re.sub(r"\s+", " ", re.sub(r"[#*_`>\[\]]", "", f)).strip(" -:\t")
+            if 12 <= len(s) <= 220:
+                sents.append(s)
+    for n in needles:
+        for s in sents:
+            if n in s.lower():
+                return s
     return ""
 
 
@@ -111,10 +122,83 @@ def parse_teardown(text):
         "prospect": prospect, "vertical": vertical, "revleak": revleak,
         "leak": _first_sentence(text, ["voicemail", "missed call", "respond first",
                                         "responds first", "after hours", "after-hours"]),
-        "hook": _first_sentence(text, ["%"]),
+        "hook": _first_sentence(text, ["responds first", "respond first",
+                                       "% of customers", "buy from the business", "%"]),
         "noshow": _first_sentence(text, ["one and done", "follow-up", "follow up",
                                          "no-show", "no show", "reminder"]),
     }
+
+
+# field -> [[FILL]] token  (mirror of applyFills() in index.html)
+FILL_MAP = [
+    ("closer", "[[FILL: your name]]"),
+    ("teardownRef", "[[FILL: link/path to their teardown]]"),
+    ("volume", "[[FILL: ~__ inbound/week]]"),
+    ("leak", "[[FILL: __% to voicemail / __ missed calls per week / after-hours = dead]]"),
+    ("noshow", "[[FILL: manual / none / front desk overwhelmed]]"),
+    ("revleak", "[[FILL: missed calls × close rate × value]]"),
+    ("hook", "[[FILL: quote or observation from teardown]]"),
+    ("missed", "[[FILL: missed calls]]"),
+    ("day12", "[[FILL: day-12 date]]"),
+]
+
+
+def build_doc(base, f):
+    """Replace [[FILL]] tokens from a fields dict — server-side port of applyFills()."""
+    setup = "$" + f["setup"].strip() if f.get("setup", "").strip() else "$[[FILL]]"
+    mrr = "$" + f["mrr"].strip() if f.get("mrr", "").strip() else "$[[FILL]]"
+    out = base
+    for key, token in FILL_MAP:
+        v = (f.get(key) or "").strip()
+        if v:
+            out = out.replace(token, v)
+    out = out.replace("Setup fee $[[FILL]] + $[[FILL]]/mo", f"Setup fee {setup} + {mrr}/mo")
+    out = out.replace("setup fee at **$[[FILL]]**", f"setup fee at **{setup}**")
+    out = out.replace("monthly at **$[[FILL]]/mo**", f"monthly at **{mrr}/mo**")
+    out = out.replace("price locked: $[[FILL]] setup + $[[FILL]]/mo",
+                      f"price locked: {setup} setup + {mrr}/mo")
+    d12 = (f.get("day12") or "").strip()
+    if d12:
+        out = out.replace("(date: [[FILL]])", f"(date: {d12})")
+    return out
+
+
+_DRIVE_ID = re.compile(r"/(?:document|spreadsheets|presentation|file)/d/([A-Za-z0-9_-]{20,})"
+                       r"|[?&]id=([A-Za-z0-9_-]{20,})")
+
+
+def extract_drive_id(ref):
+    ref = ref.strip()
+    m = _DRIVE_ID.search(ref)
+    if m:
+        return m.group(1) or m.group(2)
+    return ref if re.fullmatch(r"[A-Za-z0-9_-]{20,}", ref) else ""
+
+
+def fetch_drive_text(ref):
+    """Fetch plain text for a *link-viewable* Drive file. Private files raise."""
+    fid = extract_drive_id(ref)
+    if not fid:
+        raise ValueError("couldn't find a Google Drive file ID in that link")
+    last = "not reachable"
+    for url in (f"https://docs.google.com/document/d/{fid}/export?format=txt",
+                f"https://drive.google.com/uc?export=download&id={fid}"):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 PrepDash"})
+            with urllib.request.urlopen(req, timeout=12) as r:
+                txt = r.read(2_000_000).decode("utf-8", "replace")
+        except Exception as e:
+            last = type(e).__name__
+            continue
+        head = txt[:600].lower()
+        if "<html" in head or "accounts.google.com" in head:
+            last = "needs sign-in"
+            continue
+        if txt.strip():
+            return txt
+    raise RuntimeError(f"that file isn't link-viewable ({last}) — share it "
+                       "'anyone with the link', or ask Claude to pull it (it has "
+                       "authenticated Drive access)")
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -186,6 +270,48 @@ class Handler(BaseHTTPRequestHandler):
             if not isinstance(text, str) or not text.strip():
                 return self._json(400, {"error": "empty text"})
             return self._json(200, parse_teardown(text))
+
+        if u.path == "/api/drive_pull":
+            ref = body.get("ref", "")
+            if not isinstance(ref, str) or not ref.strip():
+                return self._json(400, {"error": "empty ref"})
+            try:
+                text = fetch_drive_text(ref)
+            except Exception as e:
+                return self._json(400, {"error": str(e)})
+            return self._json(200, {"text": text, "fields": parse_teardown(text)})
+
+        if u.path == "/api/prep":
+            # one-shot: teardown text (+ overrides) -> parsed -> filled doc -> saved
+            text = body.get("text", "")
+            overrides = body.get("overrides") or {}
+            if not isinstance(text, str) or not text.strip():
+                return self._json(400, {"error": "empty text"})
+            if not isinstance(overrides, dict):
+                return self._json(400, {"error": "overrides must be an object"})
+            fields = parse_teardown(text)
+            for k, v in overrides.items():
+                if isinstance(v, str):
+                    fields[k] = v
+            for k in ("setup", "mrr", "closer", "teardownRef", "volume", "missed", "day12"):
+                fields.setdefault(k, "")
+            prospect = (fields.get("prospect") or "").strip()
+            if not prospect:
+                return self._json(400, {"error": "no prospect found — pass overrides.prospect"})
+            vertical = (fields.get("vertical") or "").strip() or "home"
+            fields["vertical"] = vertical
+            try:
+                slug = safe_slug(prospect)
+                base = generate_markdown(prospect, vertical)
+            except Exception as e:
+                return self._json(400, {"error": str(e)})
+            md = build_doc(base, fields)
+            path = None
+            if body.get("save", True):
+                (CALLS / f"{slug}_prep.md").write_text(md, encoding="utf-8")
+                path = f"calls/{slug}_prep.md"
+            return self._json(200, {"ok": True, "slug": slug, "path": path,
+                                    "fields": fields, "markdown": md})
 
         return self._json(404, {"error": "not found"})
 

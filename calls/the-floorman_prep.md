@@ -6,7 +6,7 @@
 | **Vertical** | Home Services — HVAC / Roofing / Plumbing / Electrical |
 | **Call date** | 2026-06-06 |
 | **Closer** | Alex Reyes |
-| **Teardown file** | Google Drive — Revenue Leak & Automation Audit |
+| **Teardown file** | Google Drive — Revenue Leak & Automation Audit: The Floorman Austin Texas |
 | **The offer** | 14-day **free** pilot → converts to production. **Setup fee $1,500 + $597/mo** (signed today, charged on conversion). |
 | **Goal of this call** | Sign the setup-fee + MRR agreement **now**; book the day-12 conversion call. |
 

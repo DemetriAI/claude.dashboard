@@ -102,6 +102,10 @@
   <!-- LEFT: form -->
   <section class="panel">
     <h2>Import teardown</h2>
+    <label>Pull from Google Drive (link or file ID)</label>
+    <input id="driveRef" placeholder="https://docs.google.com/document/d/…  or a file ID">
+    <button class="ghost" id="driveBtn" style="width:100%;margin-top:8px">📂 Pull from Drive</button>
+    <div class="hint" style="margin:10px 0 2px">…or paste the teardown text:</div>
     <textarea id="teardownText" style="min-height:70px"
       placeholder="Paste a teardown / audit here — or ask Claude to pull one from Google Drive — then Parse to auto-fill."></textarea>
     <button class="ghost" id="parseBtn" style="width:100%;margin-top:8px">Parse &amp; fill form</button>
@@ -187,7 +191,7 @@ let currentSlug = "";
 
 function fields(){ const f={}; for(const id of FIELD_IDS) f[id]=$(id).value; return f; }
 
-function toast(msg, kind){ const t=$("toast"); t.textContent=msg; t.className="toast show "+(kind||""); setTimeout(()=>t.className="toast",1900); }
+function toast(msg, kind, ms){ const t=$("toast"); t.textContent=msg; t.className="toast show "+(kind||""); setTimeout(()=>t.className="toast",ms||1900); }
 
 /* ---- fill the [[FILL]] placeholders from the form ---- */
 function applyFills(md, f){
@@ -316,6 +320,24 @@ $("saveBtn").onclick=async()=>{ if(!currentMd){toast("Nothing to save","bad");re
   const r=await fetch("/api/save",{method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({slug:currentSlug,markdown:currentMd})});
   const j=await r.json(); r.ok?toast("Saved "+j.path,"good"):toast("Save failed: "+(j.error||""),"bad"); };
+
+/* pull a teardown straight from Google Drive (link-viewable files) */
+$("driveBtn").onclick=async()=>{
+  const ref=$("driveRef").value.trim();
+  if(!ref){ toast("Paste a Drive link or file ID","bad"); return; }
+  $("driveBtn").textContent="Pulling…";
+  try{
+    const r=await fetch("/api/drive_pull",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({ref})});
+    const j=await r.json(); if(!r.ok) throw new Error(j.error||"failed");
+    $("teardownText").value=j.text||"";
+    const f=j.fields||{};
+    for(const k of ["prospect","vertical","leak","revleak","hook","noshow"]){ if(f[k]) $(k).value=f[k]; }
+    if(f.vertical) $("vhint").textContent=VHINTS[f.vertical]||"";
+    toast("Pulled from Drive — review & generate","good");
+    await generate();
+  }catch(e){ toast(e.message,"bad",4500); }
+  $("driveBtn").textContent="📂 Pull from Drive";
+};
 
 /* parse a pasted teardown -> auto-fill the form */
 $("parseBtn").onclick=async()=>{
