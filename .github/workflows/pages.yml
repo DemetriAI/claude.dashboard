@@ -1,0 +1,36 @@
+name: Deploy demo to GitHub Pages
+
+# Publishes the interactive demo (./demo) so the letter QR codes resolve.
+# One-time setup: repo Settings → Pages → Source = "GitHub Actions".
+# (Pages on a PRIVATE repo requires a paid GitHub plan; on a public repo it's free.)
+# Published URL: https://demetriai.github.io/claude.dashboard/
+
+on:
+  push:
+    branches: ["claude/eloquent-franklin-2t5ZP", "main"]
+    paths: ["demo/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./demo
+      - id: deployment
+        uses: actions/deploy-pages@v4

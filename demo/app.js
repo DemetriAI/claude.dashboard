@@ -11,6 +11,24 @@
   const fmt = (s) => Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
   const initials = (n) => n.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
 
+  /* ---------- per-recipient personalization (?ref= from the letter QR) ---------- */
+  const REFS = {
+    bramlett: ["Eric Bramlett", "Bramlett Residential"],
+    spyglass: ["Ryan Rodenbeck", "Spyglass Realty"],
+    dmtx: ["Dave Murray", "DMTX Realty Group"],
+    keenan: ["Joe & Cara Keenan", "The Keenan Group"],
+    jorgenson: ["Kasey Jorgenson", "Jorgenson Real Estate"],
+  };
+  try {
+    const ref = new URLSearchParams(location.search).get("ref");
+    if (ref && REFS[ref]) {
+      const [nm, firm] = REFS[ref];
+      const el = document.getElementById("prepared");
+      if (el) { el.textContent = "★ Prepared for " + nm + " · " + firm; el.hidden = false; }
+      document.title = "PremierConnect AI — Demo for " + firm;
+    }
+  } catch (e) {}
+
   /* ---------- reveal on scroll ---------- */
   const revObs = new IntersectionObserver((es) => {
     es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); revObs.unobserve(e.target); } });
