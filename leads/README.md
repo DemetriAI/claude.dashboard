@@ -17,6 +17,33 @@ against — nothing here is fabricated.
 
 ---
 
+## Results — this run (generated 2026-06-06)
+
+| Vertical | Leads | Warm | Cold | Rating found | Owner named | No online booking |
+|----------|------:|-----:|-----:|-------------:|------------:|------------------:|
+| Optometry  | 30 | 2  | 28 | 20 | 30 | 3  |
+| Law        | 30 | 12 | 18 | 25 | 29 | 15 |
+| Accounting | 30 | 5  | 25 | 17 | 30 | 5  |
+| **Total**  | **90** | **19** | **71** | **62** | **89** | **23** |
+
+**Why optometry skews cold and law skews warm** — real signal, not noise: eye-care
+practices in this metro almost universally run online schedulers and carry
+hundreds of reviews (already strong on reputation + booking → low fit), while
+many small law firms lack online booking and have thin review counts → high fit.
+
+**Top warm leads to work first**
+- **Law · Seiter Law PLLC** (Tempe, fit 100) — 3.6★, 15 reviews, no online booking → *Call* (reputation repair)
+- **Law · Blake & Pulsifer** (86), **Shaffer Family Law** (81), **Clarke Law** (81), **Nearhood Law** (75)
+- **Accounting · Scottsdale CPAs** (71), **Thomas S Holly CPA** (70), **XZ CPA** (65)
+- **Optometry · Family Tree Eye Care** (Gilbert, 71), **Eyes on Fountain Hills** (63)
+
+**Independent authenticity spot-checks** — Seiter Law (Marcus Seiter, 480-345-3300),
+Family Tree Eye Care (Dr. Yamamoto, 29 Yelp reviews), and Scottsdale CPAs (Darren
+Roberts, est. 2004, 28 Yelp reviews) were each re-verified outside the research
+pipeline: phone, website, owner, and review counts all matched. No fabrication found.
+
+---
+
 ## How leads were built
 
 1. **Discovery** — parallel web-research agents pulled real practices per

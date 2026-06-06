@@ -120,7 +120,7 @@ def detect_source(notes, source_urls):
 
 def score_reviews(count):
     if count is None:
-        return 22, "no public reviews found (reputation unmanaged?)"
+        return 12, "review count unconfirmed (not retrievable)"
     if count < 20:
         return 30, f"only {count} reviews (thin reputation)"
     if count < 50:
@@ -133,7 +133,7 @@ def score_reviews(count):
 
 def score_rating(rating):
     if rating is None:
-        return 8, "rating unknown"
+        return 6, "rating unconfirmed (not retrievable)"
     if rating < 3.8:
         return 25, f"{rating}* rating (reputation problem)"
     if rating < 4.2:
@@ -148,22 +148,25 @@ def score_booking(booking):
     if booking == "no":
         return 45, "no online booking — pure scheduling-automation opportunity"
     if booking == "unknown":
-        return 27, "no online booking found (unverified)"
+        return 22, "online booking unconfirmed"
     return 8, "has some online booking"
 
 def best_channel(temp, booking, review_pts, rating, owner_known):
     """Recommend the first outreach channel and explain why."""
-    # Video shines when there is a gap you can literally show on screen.
+    # Sub-4.0 reputation repair is a delicate conversation — better live than a
+    # video that publicly flags their bad rating.
+    if temp == "Warm" and (rating is not None and rating < 4.0):
+        return ("Call", "Warm + sub-4.0 rating: reputation repair is a delicate live "
+                "conversation; call the owner" + (" by name" if owner_known else "") + ".")
+    # Otherwise video shines when there's a gap you can literally show on screen.
     if temp == "Warm" and booking in ("no", "unknown"):
         return ("Video", "Warm + missing/unclear online booking: record a 60-sec "
-                "Loom showing the broken booking path and the fix.")
-    if temp == "Warm" and (rating is not None and rating < 4.2):
-        return ("Call", "Warm + sub-4.2 rating: reputation is a live conversation; "
-                "call the owner" + (" by name" if owner_known else "") + ".")
+                "Loom showing the booking gap and the fix.")
     if temp == "Warm":
-        return ("Video", "Warm lead: a short personalized audit video earns the "
-                "first reply without demanding their time.")
-    if review_pts >= 22:
+        return ("Call", "Warm, booking in place: call the owner"
+                + (" by name" if owner_known else "")
+                + " to pitch missed-call text-back + AI receptionist.")
+    if review_pts >= 20:
         return ("Call", "Thin reputation but otherwise tidy: a quick call "
                 "to pitch review-generation lands fastest.")
     return ("Email", "Cooler fit: low-touch email nurture; follow up if engaged.")
