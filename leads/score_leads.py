@@ -269,8 +269,61 @@ def process(vertical):
         print(f"  [{vertical}] applied focused enrichment to {enriched_n} businesses")
     return rows
 
+def write_status(stats, grand):
+    """Emit a heartbeat the pipeline refreshes every run. Fresh timestamp =
+    healthy; stale relative to your cadence = a run was missed/broke."""
+    import json, datetime
+    now = datetime.datetime.now(datetime.timezone.utc)
+    total = len(grand)
+    warm = sum(1 for r in grand if r["temperature"] == "Warm")
+    blanks = sum(1 for r in grand if not r["phone"] or not r["website"])
+    integrity_ok = (blanks == 0 and total > 0)
+    status = {
+        "last_run_utc": now.isoformat(timespec="seconds"),
+        "region": "Phoenix metro, AZ",
+        "leads_total": total,
+        "warm": warm,
+        "cold": total - warm,
+        "blank_phone_or_website": blanks,
+        "integrity_ok": integrity_ok,
+        "by_vertical": stats,
+    }
+    with open(os.path.join(HERE, "_status.json"), "w") as f:
+        json.dump(status, f, indent=2)
+    health = "PASS" if integrity_ok else "FAIL"
+    lines = [
+        "# Lead Pipeline — Status / Heartbeat",
+        "",
+        f"**Last run (UTC):** {now.strftime('%Y-%m-%d %H:%M:%S')}  ",
+        f"**Health check:** {health} (0 blank phone/website required; found {blanks})  ",
+        f"**Region:** Phoenix metro, AZ  ",
+        f"**Total leads:** {total}  ·  **Warm:** {warm}  ·  **Cold:** {total - warm}",
+        "",
+        "| Vertical | Leads | Warm | Cold | Rating found |",
+        "|----------|------:|-----:|-----:|-------------:|",
+    ]
+    for v, s in stats.items():
+        lines.append(f"| {v} | {s['total']} | {s['warm']} | {s['cold']} | {s['rating_found']} |")
+    lines += [
+        "",
+        "## How to know it's working",
+        "- **This timestamp updates on every pipeline run.** If it is older than",
+        "  your configured cadence (e.g. >24h for a daily run), a run was missed",
+        "  or failed — that is your signal to look.",
+        "- **Health check** must read PASS (no lead missing a phone or website).",
+        "- Cross-check against the **GitHub Actions** run history (independent,",
+        "  timestamped, can't be faked) once the schedule is enabled.",
+        "",
+        "_Machine-readable copy: `_status.json`. Regenerate: `python3 score_leads.py`._",
+    ]
+    with open(os.path.join(HERE, "STATUS.md"), "w") as f:
+        f.write("\n".join(lines) + "\n")
+    print(f"\nstatus written: STATUS.md / _status.json  (health: {health})")
+
+
 def main():
     grand = []
+    stats = {}
     for vertical, outfile in VERTICALS.items():
         rows = process(vertical)
         keep = rows[:30]
@@ -281,6 +334,9 @@ def main():
             w.writerows(keep)
         warm = sum(1 for r in keep if r["temperature"] == "Warm")
         norating = sum(1 for r in keep if r["rating"] == "")
+        stats[vertical] = {"total": len(keep), "warm": warm,
+                           "cold": len(keep) - warm,
+                           "rating_found": len(keep) - norating}
         print(f"\n=== {vertical}: {len(keep)} leads "
               f"({warm} warm / {len(keep)-warm} cold), "
               f"{norating} without a found rating ===")
@@ -290,9 +346,9 @@ def main():
                   f"{str(r['rating']) or '?':>4}*/{r['review_count'] or '?'} rv")
         grand.extend(keep)
     print(f"\nTOTAL leads written: {len(grand)}")
-    # verification: no blank phone/website
     bad = [r for r in grand if not r["phone"] or not r["website"]]
     print(f"Rows missing phone/website: {len(bad)} (must be 0)")
+    write_status(stats, grand)
 
 if __name__ == "__main__":
     main()
