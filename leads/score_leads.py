@@ -77,6 +77,35 @@ def parse_booking(s):
         return "no"
     return "unknown"
 
+def load_enrichment(vertical):
+    """Optional focused-lookup overrides: raw/enrich_<vertical>.psv with rows
+    NAME | RATING | REVIEW_COUNT | ONLINE_BOOKING | SOURCE
+    Real values here take precedence over the discovery pass (they come from a
+    dedicated Google rating/review/booking lookup). NOT_FOUND never overwrites
+    a value we already have."""
+    path = os.path.join(RAW, f"enrich_{vertical}.psv")
+    out = {}
+    if not os.path.exists(path):
+        return out
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.count("|") < 3:
+                continue
+            parts = [p.strip() for p in line.split("|")]
+            while len(parts) < 5:
+                parts.append("")
+            name, rating_s, reviews_s, booking_s, src = parts[:5]
+            key = re.sub(r"[^a-z0-9]", "", name.lower())[:24]
+            out[key] = {
+                "rating": parse_rating(rating_s),
+                "reviews": parse_reviews(reviews_s),
+                "booking": parse_booking(booking_s) if booking_s.strip()
+                           and booking_s.strip().upper() != "NOT_FOUND" else None,
+                "src": src,
+            }
+    return out
+
 def detect_source(notes, source_urls):
     blob = (notes + " " + source_urls).lower()
     for key, label in [("google", "Google"), ("yelp", "Yelp"),
@@ -146,6 +175,8 @@ def process(vertical):
     if not os.path.exists(path):
         print(f"!! missing raw file: {path}")
         return []
+    enrich = load_enrichment(vertical)
+    enriched_n = 0
     rows = []
     seen = set()
     with open(path, encoding="utf-8") as f:
@@ -174,6 +205,20 @@ def process(vertical):
             rating = parse_rating(rating_s)
             reviews = parse_reviews(reviews_s)
             booking = parse_booking(booking_s)
+            # apply focused-lookup enrichment (real values win; NOT_FOUND never clobbers)
+            if key in enrich:
+                e = enrich[key]
+                used = False
+                if e["rating"] is not None:
+                    rating = e["rating"]; used = True
+                if e["reviews"] is not None:
+                    reviews = e["reviews"]; used = True
+                if e["booking"] is not None:
+                    booking = e["booking"]; used = True
+                if used:
+                    enriched_n += 1
+                    if e["src"]:
+                        sources = (sources + ", " + e["src"]).strip(", ")
             owner = clean(owner)
             owner_known = bool(owner) and owner.upper() != "NOT_FOUND"
 
@@ -217,6 +262,8 @@ def process(vertical):
             })
     # sort best-fit first, keep top 30
     rows.sort(key=lambda r: r["fit_score"], reverse=True)
+    if enrich:
+        print(f"  [{vertical}] applied focused enrichment to {enriched_n} businesses")
     return rows
 
 def main():
