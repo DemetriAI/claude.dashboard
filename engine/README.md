@@ -14,12 +14,15 @@ block — you swap the config, not the engine. This is the bread-and-butter mach
 | Metric | Now |
 |---|---|
 | Active vertical | **optometry** (US — 6 seed metros) |
+| Verticals configured | **4** — optometry (live) · law · accounting · hedge_fund (re-skins ready) |
 | Targets sourced | **42** real, web-verified |
 | Pain gate | **37 PROCEED · 5 HALT** |
 | Looms ready | 3 worked + template |
-| Decks ready | 2 worked + generic + template |
+| Decks ready | **2 generated LIVE in Gamma** + generic + template |
 | Cold/warm outreach | ✅ built (not yet sent on a live account) |
 | Paid ads | ⛔ HOLD (needs ≥2 paying clients + testimonials) |
+| UI dashboard | ✅ `index.html` — toggle across all 4 verticals |
+| Notion CRM | ✅ live Pipeline DB (42 leads synced) |
 | **Calls booked this week** | **0** (awaiting first reply) |
 | **Pilots live** | **0** |
 | **MRR added** | **$0** |
@@ -28,31 +31,52 @@ block — you swap the config, not the engine. This is the bread-and-butter mach
 > before 9 is fuel. The two zeros above are the only numbers that matter — the weekly job is to make
 > them move.
 
+### 🔗 Live artifacts (generated this run)
+- **UI dashboard:** open [`../index.html`](../index.html) — toggle Optometry / Law / Accounting / Hedge Fund.
+- **Gamma decks (live):** [Round Rock Eyes](https://gamma.app/docs/rda8u0bnlrxh5s3) · [True Eye Care](https://gamma.app/docs/eakkn83zi78d6cg).
+- **Notion CRM (live):** [PremierConnect AI — Pipeline](https://app.notion.com/p/3772adc44a2481fea855cc36a692ab20) — all 42 leads synced; filter `Stage` to watch the money events.
+- **Apollo:** people **and** company search are paywalled on the current plan (0 credits charged). The engine sources real leads via the web path until the plan is upgraded; the saved query is in `optometry/leads.README.md`.
+
 ---
 
 ## 🗂️ Where everything is (the map)
 
+Three surfaces: the **UI** (toggle across verticals), the **engine files** (source of truth), and a
+**live Notion CRM** (the pipeline).
+
 ```
-engine/
-├── README.md            ← you are here (the dashboard)
-├── MAINTENANCE.md       ← the weekly run-of-show (do this every week)
-└── optometry/           ← this vertical's run
-    ├── config.md            the resolved GLOBAL CONFIG (override anytime)
-    ├── run_plan.md          Agent 1 — plan + the PAIN-gate audit
-    ├── pipeline.csv         every target's live stage + next action  ← single source of truth
-    ├── leads.csv            Agent 2 — 42 scored real targets
-    ├── leads.README.md      method, scoring rubric, Apollo query (for when the plan is upgraded)
-    ├── pain_briefs.md       Agent 3 — the quantified pain + PROCEED/HALT decisions
-    ├── looms/               Agent 4 — 90-sec scripts (3 worked + _TEMPLATE)
-    ├── decks/               Agent 5 — Gamma-ready prompts (2 worked + generic + _TEMPLATE)
-    ├── outreach_warm.md     Agent 6 — ACA give-give-give-ask (activates on first warm contact)
-    ├── outreach_cold.md     Agent 7 — lead-with-pain sequences carrying the Loom
-    ├── ads.md               Agent 8 — built but GATED (hold until 2 paying clients)
-    ├── bookings.md          Agent 9 — the booking motion + booking log  ← THE money event
-    ├── results/             Agent 10 — 7-day proof (template; unlocks at first go-live)
-    ├── testimonials/        Agent 11 — proof capture (template; unlocks on a win)
-    ├── conversions/         Agent 12 — pilot→paid (template; unlocks at day 7–12)
-    └── _private/            git-ignored — enriched contact PII goes here, never in tracked files
+claude.dashboard/
+├── index.html           ← the UI dashboard — toggle across all 4 verticals (open in any browser)
+├── dashboard/           ← the UI's assets; data.js is the single source of truth for the UI
+└── engine/
+    ├── README.md        ← you are here (the text control-center)
+    ├── MAINTENANCE.md   ← the weekly run-of-show (do this every week)
+    ├── optometry/       ← LIVE run — fully populated (children below)
+    ├── law/             ← re-skin: config.md + skin.md (sourcing queued)
+    ├── accounting/      ← re-skin: config.md + skin.md (sourcing queued)
+    └── hedge-fund/      ← re-skin: config.md + skin.md (warm-intro only — different rules)
+```
+
+Inside the live vertical:
+
+```
+optometry/
+├── config.md            the resolved GLOBAL CONFIG (override anytime)
+├── run_plan.md          Agent 1 — plan + the PAIN-gate audit
+├── pipeline.csv         every target's live stage + next action  ← single source of truth
+├── leads.csv            Agent 2 — 42 scored real targets
+├── leads.README.md      method, scoring rubric, Apollo query (for when the plan is upgraded)
+├── pain_briefs.md       Agent 3 — the quantified pain + PROCEED/HALT decisions
+├── looms/               Agent 4 — 90-sec scripts (3 worked + _TEMPLATE)
+├── decks/               Agent 5 — 2 decks generated LIVE in Gamma (+ generic + _TEMPLATE)
+├── outreach_warm.md     Agent 6 — ACA give-give-give-ask (activates on first warm contact)
+├── outreach_cold.md     Agent 7 — lead-with-pain sequences carrying the Loom
+├── ads.md               Agent 8 — built but GATED (hold until 2 paying clients)
+├── bookings.md          Agent 9 — the booking motion + booking log  ← THE money event
+├── results/             Agent 10 — 7-day proof (template; unlocks at first go-live)
+├── testimonials/        Agent 11 — proof capture (template; unlocks on a win)
+├── conversions/         Agent 12 — pilot→paid (template; unlocks at day 7–12)
+└── _private/            git-ignored — enriched contact PII goes here, never in tracked files
 ```
 
 **Downstream:** a booked call (Agent 9) hands off to the live-close system in

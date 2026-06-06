@@ -1,7 +1,10 @@
 # Gamma deck — Round Rock Eyes
 
-**How to use:** paste everything in the box below into **Gamma → Generate** (or say the word and I'll
-run it live via the Gamma tool). 7 cards, problem-first. Card 1 is their pain. Exactly one CTA card.
+> ✅ **Generated live:** **https://gamma.app/docs/rda8u0bnlrxh5s3** — open in Gamma to brand/tweak,
+> then present on the call or export to PDF. (Regenerate anytime from the prompt below.)
+
+**How to use:** the deck above was generated from the prompt in the box below (paste into
+**Gamma → Generate** to recreate). 7 cards, problem-first. Card 1 is their pain. Exactly one CTA card.
 Numbers come from `pain_briefs.md` (est., to confirm on the call).
 
 ---

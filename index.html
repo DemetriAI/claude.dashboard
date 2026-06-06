@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PremierConnect AI · Outreach & Outcome Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="dashboard/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">◐</div>
+      <div>
+        <h1>PremierConnect&nbsp;AI</h1>
+        <p class="tagline">Outreach &amp; Outcome Engine — one engine, 12 agents, re-skinned per industry</p>
+      </div>
+    </div>
+    <div class="meta">
+      <span id="generatedAt" class="muted">—</span>
+      <a class="ghost-btn" href="engine/README.md">Engine&nbsp;files ↗</a>
+    </div>
+  </header>
+
+  <!-- Industry toggle -->
+  <nav id="verticalToggle" class="toggle" aria-label="Choose industry"></nav>
+
+  <main id="app" class="app">
+    <p class="muted load-note">Loading engine data… if this persists, ensure <code>dashboard/data.js</code> is present.</p>
+  </main>
+
+  <footer class="foot">
+    <span>The money events are <strong>Agent&nbsp;9</strong> (a booked live call) and <strong>Agent&nbsp;12</strong> (the convert). Everything before 9 is fuel.</span>
+    <span class="muted">Weekly cadence → <a href="engine/MAINTENANCE.md">MAINTENANCE.md</a></span>
+  </footer>
+
+  <script src="dashboard/data.js"></script>
+  <script src="dashboard/app.js"></script>
+</body>
+</html>

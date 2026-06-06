@@ -1,8 +1,11 @@
 # Gamma deck — True Eye Care
 
-**How to use:** paste the box below into **Gamma → Generate** (or I'll run it live via the Gamma tool
-on request). 7 cards, problem-first. Card 1 is their pain. Exactly one CTA card. Numbers from
-`pain_briefs.md` (est., confirmed on the call).
+> ✅ **Generated live:** **https://gamma.app/docs/eakkn83zi78d6cg** — open in Gamma to brand/tweak,
+> then present on the call or export to PDF. (Regenerate anytime from the prompt below.)
+
+**How to use:** the deck above was generated from the prompt in the box below (paste into
+**Gamma → Generate** to recreate). 7 cards, problem-first. Card 1 is their pain. Exactly one CTA card.
+Numbers from `pain_briefs.md` (est., confirmed on the call).
 
 ---
 ```text
