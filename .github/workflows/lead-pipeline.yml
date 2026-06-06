@@ -1,26 +1,26 @@
-# Lead pipeline — scheduled run + heartbeat
+# Lead pipeline — weekly fresh leads + heartbeat
 #
 # HONEST NOTES (read before relying on this for "24/7"):
 #  * GitHub runs scheduled workflows ONLY on the repository's DEFAULT branch.
-#    This file does nothing until it is merged into that branch.
-#  * TIER 1 below is a zero-cost proof-of-life: it re-runs the scorer and
-#    advances the heartbeat timestamp on every fire, so you can confirm the
-#    schedule actually works without spending anything or adding secrets.
-#  * TIER 2 is the real lead engine (generates NEW leads with Claude). It is
-#    commented out and requires you to add an ANTHROPIC_API_KEY secret. It
-#    spends API tokens on every run — that is the true cost of always-on.
+#    This file is inert until merged into that branch.
+#  * It needs an ANTHROPIC_API_KEY repo secret (Settings > Secrets > Actions)
+#    for the Claude step that generates NEW leads. Each run spends API tokens —
+#    that is the real cost of an always-on engine.
+#  * TEST IT FIRST: after merging + adding the secret, click "Run workflow"
+#    (workflow_dispatch) once and watch it go green before trusting the cron.
 #  * Failures: GitHub emails the workflow file's last committer automatically,
-#    so a broken run pings you without any extra setup.
+#    and the run shows red in the Actions tab. Silence + a fresh STATUS.md
+#    timestamp = healthy.
 
 name: lead-pipeline
 
 on:
-  workflow_dispatch: {}            # run manually any time from the Actions tab
+  workflow_dispatch: {}            # one-click manual run (use this to test)
   schedule:
-    - cron: "0 13 * * *"           # daily ~06:00 America/Phoenix (13:00 UTC)
+    - cron: "0 13 * * 1"           # Mondays ~06:00 America/Phoenix (13:00 UTC)
 
 permissions:
-  contents: write                  # commit the refreshed heartbeat/leads
+  contents: write                  # commit refreshed leads + heartbeat
 
 concurrency:
   group: lead-pipeline
@@ -36,30 +36,32 @@ jobs:
         with:
           python-version: "3.12"
 
-      # ---- TIER 1: zero-cost proof-of-life -------------------------------
-      - name: Refresh heartbeat (re-score existing data)
+      # Zero-cost heartbeat refresh over existing data (runs first so the
+      # pipeline is always exercised even before the Claude step).
+      - name: Refresh heartbeat
         working-directory: leads
         run: python3 score_leads.py
 
-      # ---- TIER 2: real lead refresh with Claude (opt-in) ----------------
-      # 1) Add repo secret ANTHROPIC_API_KEY (Settings > Secrets > Actions)
-      # 2) Uncomment this step. Confirm the action version against current docs:
-      #    https://code.claude.com/docs/en/claude-code-on-the-web
-      # - name: Generate fresh leads with Claude
-      #   uses: anthropics/claude-code-action@v1
-      #   with:
-      #     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-      #     prompt: |
-      #       Refresh leads/ for the Phoenix metro. Re-run discovery +
-      #       enrichment to refill cold slots with fresh warm prospects,
-      #       regenerate the CSVs with score_leads.py, and keep README/STATUS
-      #       accurate. No fabricated data; every lead keeps a source URL.
+      # The real engine: generate fresh leads to refill cold slots.
+      # Verify the action version/inputs against current docs if it errors:
+      # https://code.claude.com/docs/en/claude-code-on-the-web
+      - name: Generate fresh leads with Claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Refresh leads/ for the Phoenix metro. Re-run discovery + enrichment
+            to refill the lowest-fit (cold) slots with fresh, non-duplicate warm
+            prospects, then regenerate the CSVs with score_leads.py so STATUS.md
+            and the per-vertical files stay current. Rules: independent,
+            owner-operated businesses only; no fabricated data; every lead keeps
+            a verified phone, website, and source URL.
 
-      - name: Commit refreshed status
+      - name: Commit refreshed leads + status
         run: |
           git config user.name  "lead-pipeline-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add leads/STATUS.md leads/_status.json leads/*_phoenix_az.csv
-          git commit -m "chore: scheduled lead pipeline run [skip ci]" \
+          git add leads/STATUS.md leads/_status.json leads/*_phoenix_az.csv leads/raw
+          git commit -m "chore: weekly lead pipeline run [skip ci]" \
             || echo "no changes to commit"
           git push

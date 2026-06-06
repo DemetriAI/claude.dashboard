@@ -143,4 +143,20 @@ first contact and they become additional pitch surface. See `core_four_flags`.
 - A few borderline inclusions are flagged in `notes` (e.g., a newer practice, a
   2–5 office local chain) and were kept because they otherwise fit the profile.
 
+## Automation & monitoring (is it running?)
+
+A weekly schedule is configured in `.github/workflows/lead-pipeline.yml`
+(Mondays ~6am Phoenix). It is **inert until two things are done by the repo owner**:
+1. Merge this branch into the repository's **default branch** (GitHub only runs
+   schedules there).
+2. Add an **`ANTHROPIC_API_KEY`** repo secret (Settings → Secrets → Actions) so
+   the Claude step can generate fresh leads.
+
+**How to confirm it's alive:**
+- `leads/STATUS.md` — heartbeat; the "Last run" timestamp advances every run.
+  Older than ~7 days → a run was missed. Health check must read **PASS**.
+- **GitHub → Actions** tab — independent, timestamped run history (green/red).
+- GitHub emails you automatically if a scheduled run fails.
+- Test it any time with **Actions → lead-pipeline → Run workflow**.
+
 _Reproduce anytime:_ `cd leads && python3 score_leads.py`
