@@ -74,6 +74,49 @@ def list_examples():
     return out
 
 
+def _first_sentence(text, needles):
+    for line in text.splitlines():
+        if line.strip().startswith("#"):    # skip section headings
+            continue
+        for f in re.split(r"(?<=[.!?])\s+", line):
+            if any(n in f.lower() for n in needles):
+                s = re.sub(r"\s+", " ", re.sub(r"[#*_`>\[\]]", "", f)).strip(" -:\t")
+                if 12 <= len(s) <= 220:
+                    return s
+    return ""
+
+
+def parse_teardown(text):
+    """Best-effort field extraction from a free-form teardown / audit doc."""
+    low = text.lower()
+    kw = {
+        "home": ["hvac", "roofing", "roofer", "plumb", "flooring", "floorman", "contractor",
+                 "homeowner", "job site", "install", "electrician", "landscap"],
+        "healthcare": ["patient", "dental", "optical", "optometry", "clinic", "practice",
+                       "hipaa", "med spa", "medspa", "chiropract", "ophthalm"],
+        "legal": ["law firm", "attorney", "legal", "intake", " case", "matter",
+                  "accounting", "insurance"],
+    }
+    score = {v: sum(low.count(k) for k in ks) for v, ks in kw.items()}
+    vertical = max(score, key=score.get) if max(score.values()) > 0 else ""
+    h1s = [re.sub(r"[#*]", "", l).strip() for l in text.splitlines() if l.strip().startswith("# ")]
+    bad = ("audit", "teardown", "revenue leak", "prepared")
+    cand = [h for h in h1s if h and not any(b in h.lower() for b in bad)]
+    prospect = (cand[0] if cand else (h1s[0] if h1s else "")).strip()
+    m = re.search(r"(\$[\d,]+[^.\n]{0,40}|\d{1,3}\s*-?\s*\d{0,3}\s*(?:high-value\s+)?"
+                  r"(?:jobs|patients|calls|leads|clients|appointments)[^.\n]{0,30}"
+                  r"(?:month|week|mo)\b)", text, re.I)
+    revleak = re.sub(r"\s+", " ", m.group(1)).strip() if m else ""
+    return {
+        "prospect": prospect, "vertical": vertical, "revleak": revleak,
+        "leak": _first_sentence(text, ["voicemail", "missed call", "respond first",
+                                        "responds first", "after hours", "after-hours"]),
+        "hook": _first_sentence(text, ["%"]),
+        "noshow": _first_sentence(text, ["one and done", "follow-up", "follow up",
+                                         "no-show", "no show", "reminder"]),
+    }
+
+
 class Handler(BaseHTTPRequestHandler):
     server_version = "PrepDash/1.0"
 
@@ -137,6 +180,12 @@ class Handler(BaseHTTPRequestHandler):
             path = CALLS / f"{slug}_prep.md"
             path.write_text(md, encoding="utf-8")
             return self._json(200, {"ok": True, "path": f"calls/{slug}_prep.md"})
+
+        if u.path == "/api/parse_teardown":
+            text = body.get("text", "")
+            if not isinstance(text, str) or not text.strip():
+                return self._json(400, {"error": "empty text"})
+            return self._json(200, parse_teardown(text))
 
         return self._json(404, {"error": "not found"})
 

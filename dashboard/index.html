@@ -101,7 +101,12 @@
 <div class="wrap">
   <!-- LEFT: form -->
   <section class="panel">
-    <h2>Prospect</h2>
+    <h2>Import teardown</h2>
+    <textarea id="teardownText" style="min-height:70px"
+      placeholder="Paste a teardown / audit here — or ask Claude to pull one from Google Drive — then Parse to auto-fill."></textarea>
+    <button class="ghost" id="parseBtn" style="width:100%;margin-top:8px">Parse &amp; fill form</button>
+
+    <h2 style="margin-top:20px">Prospect</h2>
     <label>Prospect name</label>
     <input id="prospect" placeholder="Bright Smile Dental">
 
@@ -154,6 +159,7 @@
       </div>
       <span class="badge" id="docName"></span>
       <div class="spacer"></div>
+      <button class="ghost" id="calBtn" title="Open a prefilled Google Calendar event (no login wall)">📅 Book day-12</button>
       <button class="ghost" id="copyBtn">Copy</button>
       <button class="ghost" id="dlBtn">Download .md</button>
       <button class="ghost" id="saveBtn">Save to calls/</button>
@@ -310,6 +316,39 @@ $("saveBtn").onclick=async()=>{ if(!currentMd){toast("Nothing to save","bad");re
   const r=await fetch("/api/save",{method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({slug:currentSlug,markdown:currentMd})});
   const j=await r.json(); r.ok?toast("Saved "+j.path,"good"):toast("Save failed: "+(j.error||""),"bad"); };
+
+/* parse a pasted teardown -> auto-fill the form */
+$("parseBtn").onclick=async()=>{
+  const text=$("teardownText").value.trim();
+  if(!text){ toast("Paste a teardown first","bad"); return; }
+  $("parseBtn").textContent="Parsing…";
+  try{
+    const r=await fetch("/api/parse_teardown",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text})});
+    const j=await r.json(); if(!r.ok) throw new Error(j.error||"failed");
+    for(const k of ["prospect","vertical","leak","revleak","hook","noshow"]){ if(j[k]) $(k).value=j[k]; }
+    if(j.vertical) $("vhint").textContent=VHINTS[j.vertical]||"";
+    toast("Filled from teardown — review, then it’s generating","good");
+    await generate();
+  }catch(e){ toast("Parse failed: "+e.message,"bad"); }
+  $("parseBtn").textContent="Parse & fill form";
+};
+
+/* build a no-auth Google Calendar event link for the day-12 conversion call */
+function gcalLink(){
+  const name=$("prospect").value.trim()||"Prospect";
+  const dt=($("day12").value.trim()||"").replace(/-/g,"");
+  const timed=/^\d{8}$/.test(dt);
+  const title=`PremierConnect AI — ${name}: pilot → production (Day 12)`;
+  const details=["Day-12 conversion call for the 14-day pilot.","","Agenda:",
+    "• Review pilot stats (calls captured, booked, revenue recovered)",
+    "• Confirm fit → flip to production",
+    "• First charge processes (setup + first month, per signed agreement)"].join("\n");
+  let url="https://calendar.google.com/calendar/render?action=TEMPLATE"
+    +"&text="+encodeURIComponent(title)+"&details="+encodeURIComponent(details)+"&ctz=America/Chicago";
+  if(timed) url+="&dates="+dt+"T100000/"+dt+"T103000";
+  return url;
+}
+$("calBtn").onclick=()=>{ window.open(gcalLink(),"_blank","noopener"); };
 
 /* demo defaults so the dashboard opens with a full doc */
 function prefill(){
