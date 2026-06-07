@@ -146,11 +146,12 @@ first contact and they become additional pitch surface. See `core_four_flags`.
 ## Automation & monitoring (is it running?)
 
 A weekly schedule is configured in `.github/workflows/lead-pipeline.yml`
-(Mondays ~6am Phoenix). It is **inert until two things are done by the repo owner**:
-1. Merge this branch into the repository's **default branch** (GitHub only runs
-   schedules there).
-2. Add an **`ANTHROPIC_API_KEY`** repo secret (Settings → Secrets → Actions) so
-   the Claude step can generate fresh leads.
+(Mondays ~6am Phoenix). To activate it in this repository:
+1. Make sure this repo's **default branch is `main`** — GitHub only runs
+   scheduled workflows on the default branch.
+2. Add an **`ANTHROPIC_API_KEY`** repo secret (Settings → Secrets and variables
+   → Actions) so the Claude step can generate fresh leads. Each run spends API
+   tokens — that is the real cost of an always-on engine.
 
 **How to confirm it's alive:**
 - `leads/STATUS.md` — heartbeat; the "Last run" timestamp advances every run.

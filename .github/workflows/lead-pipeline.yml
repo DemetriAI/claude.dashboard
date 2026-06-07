@@ -1,12 +1,13 @@
 # Lead pipeline — weekly fresh leads + heartbeat
 #
 # HONEST NOTES (read before relying on this for "24/7"):
-#  * GitHub runs scheduled workflows ONLY on the repository's DEFAULT branch.
-#    This file is inert until merged into that branch.
+#  * GitHub runs scheduled workflows ONLY on a repo's DEFAULT branch. Keep this
+#    repo's default branch set to `main` (where this file lives) or the cron
+#    will never fire.
 #  * It needs an ANTHROPIC_API_KEY repo secret (Settings > Secrets > Actions)
 #    for the Claude step that generates NEW leads. Each run spends API tokens —
 #    that is the real cost of an always-on engine.
-#  * TEST IT FIRST: after merging + adding the secret, click "Run workflow"
+#  * TEST IT FIRST: after adding the secret, click "Run workflow"
 #    (workflow_dispatch) once and watch it go green before trusting the cron.
 #  * Failures: GitHub emails the workflow file's last committer automatically,
 #    and the run shows red in the Actions tab. Silence + a fresh STATUS.md
@@ -62,6 +63,11 @@ jobs:
           git config user.name  "lead-pipeline-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add leads/STATUS.md leads/_status.json leads/*_phoenix_az.csv leads/raw
-          git commit -m "chore: weekly lead pipeline run [skip ci]" \
-            || echo "no changes to commit"
-          git push
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: weekly lead pipeline run [skip ci]"
+            # Push explicitly to the triggering branch: scheduled runs check out
+            # a detached HEAD, so a bare `git push` would fail.
+            git push origin "HEAD:${{ github.ref_name }}"
+          fi
