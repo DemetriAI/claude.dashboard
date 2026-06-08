@@ -1,29 +1,31 @@
-# The 4 Offers — PremierConnect AI for Funds
+# The 4 Offers — PremierConnect AI (research systems)
 
-Each offer is risk-reversed and frames either **more money (AUM)** or **hours saved**. Pricing is **subscription / hours-saved / qualified-engagement based — never a % of capital raised** (that crosses into broker-dealer territory; see `playbook.md` §3).
-
----
-
-## Offer 1 — Dormant-LP Reactivation Sprint  *(more money)*
-- **What:** In 30 days we re-engage your last 100–300 passed / dormant allocator relationships with a compliant, pre-approved sequence and book qualified re-intro meetings.
-- **Risk reversal:** Flat sprint fee; if we don't book **≥ a set number of qualified allocator meetings**, the next month is free.
-- **ROI math:** One reactivated LP committing **$5M** at a 1.5% management fee = **$75K/yr recurring** (before carry). The sprint pays for itself on a single re-up.
-
-## Offer 2 — Speed-to-Capital Pilot (free, 14 days)  *(more money + hours saved)*
-- **What:** Free 14-day pilot — we instrument your inbound allocator follow-up so every inquiry / warm intro gets a same-hour, compliant, on-brand response. We report your **before/after response time + meetings booked.**
-- **Risk reversal:** Free. You keep the data and the workflows either way.
-- **Why it works:** Allocators reward responsiveness; speed-to-LP is the cheapest edge in a raise.
-
-## Offer 3 — IR Hours-Back Guarantee  *(hours saved)*
-- **What:** We automate investor onboarding (sub-docs / KYC reminders), routine LP Q&A, scheduling, and reporting reminders.
-- **Guarantee:** If we don't save your IR / ops team **≥ 20 hours/month**, you don't pay that month.
-- **ROI math:** 20 hrs/mo of senior IR time ≈ **$3–6K/mo** reclaimed — redeployed to actual allocator meetings.
-
-## Offer 4 — Cap-Intro Follow-Up Concierge  *(more money)*
-- **What:** Around every conference / cap-intro event, we run instant, personalized, compliant follow-up to every allocator you met, book the next meeting, and keep them warm afterward.
-- **Pricing:** Per-event or monthly retainer (software + ops) — **priced on engagement / meetings booked, not on capital committed.**
-- **Why it works:** Most cap-intro value leaks away to slow follow-up; this captures it while you're still top-of-mind.
+Each frames **more alpha/money** or **hours saved**, risk-reversed. Priced subscription / per-seat / per-sprint — **software, not a cut of returns** (and never investment advice).
 
 ---
 
-**Compliance footer (attach to all offers):** PremierConnect AI provides software and investor-relations operations support. It does **not** solicit investors, recommend securities, or accept transaction-based compensation; all investor communications are client-approved and archived per the client's compliance policy.
+## Offer 1 — Coverage Expansion Sprint  *(more alpha)*
+- **What:** In 30 days we stand up AI agents covering N additional names/sectors — continuous memos + monitoring — so your analysts cover 3–5x more ground.
+- **Risk reversal:** Flat sprint fee; if we don't deliver live coverage on the agreed names by day 30, you don't pay.
+- **ROI:** One analyst (~$300K loaded) covers ~15–20 names; agents extend that to 60+. A single actionable idea or one avoided blowup pays for the year.
+- *PE/VC variant — "Deal-Sourcing Sprint":* screen N markets/targets continuously and surface fits.
+
+## Offer 2 — Speed-to-Insight Pilot (free, 2 weeks)  *(edge + hours saved)*
+- **What:** Free 14-day pilot — we instrument your earnings/filings/news so you get a parsed first-take (beat/miss vs consensus, guidance delta, KPIs, surprises) in minutes, 24/7. We report before/after time-to-insight.
+- **Risk reversal:** Free. You keep the workflows.
+- **Why it works:** Latency is P&L; it's the cheapest demonstrable edge in the pitch.
+
+## Offer 3 — Research Hours-Back Guarantee  *(hours saved)*
+- **What:** We automate the grunt work — filing pulls, transcript summaries, comp tables, watchlist monitoring.
+- **Guarantee:** If we don't save your team **≥ X hours/month**, you don't pay that month.
+- **ROI:** Redeploy analyst hours from data-gathering to thesis work; ~20–40 hrs/mo per analyst is typical.
+
+## Offer 4 — Always-On Monitoring / No-Blind-Spots  *(risk + edge)*
+- **What:** 24/7 monitoring of your book + watchlist across 8-Ks, Form 4 insider buys, 13D activist stakes, litigation, downgrades, management changes, and global/overnight events → contextual "so-what + suggested action" alerts.
+- **Pricing:** Per-seat / monthly subscription.
+- **Why it works:** Never get surprised after the close again; you're positioned before the desk opens.
+- *Family office / RIA variant:* manager & holdings monitoring + automated client/board reporting.
+
+---
+
+**Compliance footer (attach to all offers):** PremierConnect AI provides research-automation software. Outputs cite their sources; a human reviews before any trade decision. We respect client data entitlements (no redistribution of licensed data), maintain MNPI/compliance guardrails and logging, and deploy in the client's secure environment (VPC/on-prem, SOC2). We do not provide investment advice or recommend securities.
