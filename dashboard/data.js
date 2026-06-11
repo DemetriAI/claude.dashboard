@@ -2,7 +2,7 @@
    Single source of truth for the UI. Regenerate from the engine/ files after each weekly maintenance.
    (Numbers mirror engine/optometry/leads.csv, pain_briefs.md, run_plan.md, and the connector runs.) */
 window.ENGINE_DATA = {
-  generatedAt: "2026-06-05",
+  generatedAt: "2026-06-11",
   order: ["optometry", "law", "accounting", "hedge_fund"],
   verticals: {
 
@@ -66,71 +66,111 @@ window.ENGINE_DATA = {
 
     law: {
       label: "Law",
-      status: "configured",
-      statusColor: "#f5b14c",
+      status: "ready",
+      statusColor: "#28c081",
       buyer: "Owner-operator (managing partner / solo)",
       region: "US — nationwide / remote",
       offLimits: "No legal advice from AI — intake + scheduling only",
-      kpis: { targets: null, proceed: null, halt: null, booked: 0, pilots: 0, mrr: 0 },
-      gate: null,
+      kpis: { targets: 28, metros: 6, proceed: 23, halt: 5, booked: 0, pilots: 0, mrr: 0 },
+      gate: {
+        proceed: 23, halt: 5,
+        haltList: [
+          { target: "Morgan & Morgan", reason: "National, 1,000+ attorneys with staffed 24/7 intake — no missed-call pain" },
+          { target: "Lerner & Rowe", reason: "Staffed 24/7 intake call center — nothing for the AI to recover" },
+          { target: "Holland & Knight", reason: "BigLaw (~2,200 attorneys) — no owner-operator buyer" },
+          { target: "Modern Family Law", reason: "43-lawyer multi-state platform, centralized intake — exceeds ICP" },
+          { target: "HCA Healthcare Legal Dept", reason: "In-house corporate legal — not a firm, no client intake" }
+        ]
+      },
       pains: [
         { name: "Missed/slow intake calls → lost signed matters", econ: "Matter $3,500+ · recover 2–6/mo → ~$7K–$25K/mo (est.)", fix: "AI intake answers 24/7, qualifies, books the consult" },
         { name: "Slow web-lead response", econ: "Speed-to-lead decides who signs the case", fix: "AI calls/answers web leads instantly, books consult" },
         { name: "Consult no-shows", econ: "~15–25% no-show; each is lost attorney time", fix: "Automated reminders + easy reschedule" }
       ],
       agents: [
-        { n: 1, name: "Orchestrator", status: "configured", note: "config.md + skin.md ready" },
-        { n: 2, name: "Research + Leads", status: "queued", note: "Run web/Apollo sourcing" },
-        { n: 3, name: "Pain Diagnosis (gate)", status: "queued", note: "Gate runs at sourcing" },
-        { n: 4, name: "Loom script", status: "queued", note: "Lead with matter value" },
-        { n: 5, name: "Gamma deck", status: "queued", note: "Re-skin generic deck" },
-        { n: 6, name: "Warm outreach", status: "queued", note: "Bar / referral networks" },
-        { n: 7, name: "Cold outreach", status: "queued", note: "Email + LinkedIn + phone" },
-        { n: 8, name: "Paid ads", status: "queued", note: "Viable for PI once gate met" },
-        { n: 9, name: "Book the call", status: "queued", money: true, note: "Same-week, live" },
-        { n: 10, name: "Results & proof", status: "queued", note: "Recovered signed matters" },
-        { n: 11, name: "Testimonial", status: "queued", note: "Result-led + permission" },
-        { n: 12, name: "Convert", status: "queued", money: true, note: "Setup + MRR on convert" }
+        { n: 1, name: "Orchestrator", status: "done", note: "Plan + pain-gate audit" },
+        { n: 2, name: "Research + Leads", status: "done", note: "28 real firms, 6 metros (web-sourced)" },
+        { n: 3, name: "Pain Diagnosis (gate)", status: "done", note: "23 proceed / 5 halt" },
+        { n: 4, name: "Loom script", status: "done", note: "Template + 2 worked (Loewy, McCoy)" },
+        { n: 5, name: "Gamma deck", status: "done", note: "Prompt + generic ready" },
+        { n: 6, name: "Warm outreach", status: "ready", note: "Bar / referral ACA" },
+        { n: 7, name: "Cold outreach", status: "ready", note: "5-touch sequences carry the Loom" },
+        { n: 8, name: "Paid ads", status: "gated", note: "Hold until 2 paying clients (PI viable)" },
+        { n: 9, name: "Book the call", status: "ready", money: true, note: "0 booked — awaiting first reply" },
+        { n: 10, name: "Results & proof", status: "blocked", note: "Needs a live pilot" },
+        { n: 11, name: "Testimonial", status: "blocked", note: "Needs a win" },
+        { n: 12, name: "Convert", status: "blocked", money: true, note: "Needs a pilot at day 7–12" }
       ],
-      leadsNote: "Configured — sourcing queued. Run Agents 2→3 (web path or Apollo when the plan is upgraded). Differentiator: signed matters are high-value, so even a few recovered intakes/mo is large. Closes via calls/ legal skin.",
+      topLeads: [
+        { target: "Loewy Law Firm", metro: "Austin", pain: "$7,000–$25,000", score: 92 },
+        { target: "McCoy Family Law", metro: "Denver", pain: "$7,000–$17,500", score: 91 },
+        { target: "Pardo Law Firm", metro: "Charlotte", pain: "$3,500–$14,000", score: 90 },
+        { target: "Bonilla Law Firm", metro: "Austin", pain: "$7,000–$25,000", score: 90 },
+        { target: "Mark Scruggs Attorney", metro: "Nashville", pain: "$7,000–$17,500", score: 89 },
+        { target: "Buitrago Law Firm", metro: "Tampa", pain: "$3,500–$14,000", score: 89 }
+      ],
       artifacts: [
-        { label: "config.md", href: "engine/law/config.md" },
-        { label: "skin.md (pains, guardrails)", href: "engine/law/skin.md" }
+        { label: "leads.csv (28)", href: "engine/law/leads.csv" },
+        { label: "pain_briefs.md", href: "engine/law/pain_briefs.md" },
+        { label: "outreach_cold.md", href: "engine/law/outreach_cold.md" },
+        { label: "looms/", href: "engine/law/looms/" },
+        { label: "run_plan.md", href: "engine/law/run_plan.md" },
+        { label: "config.md", href: "engine/law/config.md" }
       ]
     },
 
     accounting: {
       label: "Accounting",
-      status: "configured",
-      statusColor: "#f5b14c",
+      status: "ready",
+      statusColor: "#28c081",
       buyer: "Owner-operator (firm owner / managing CPA)",
       region: "US — nationwide / remote",
       offLimits: "No tax/financial advice — intake, scheduling, doc-collection only",
-      kpis: { targets: null, proceed: null, halt: null, booked: 0, pilots: 0, mrr: 0 },
-      gate: null,
+      kpis: { targets: 27, metros: 6, proceed: 22, halt: 5, booked: 0, pilots: 0, mrr: 0 },
+      gate: {
+        proceed: 22, halt: 5,
+        haltList: [
+          { target: "H&R Block", reason: "National chain with corporate call-center intake — no owner-operator buyer" },
+          { target: "Deloitte Tax", reason: "Big 4 — institutional buyers, no front-desk pain" },
+          { target: "1-800Accountant", reason: "Staffed central client-service desk + scheduling already in place" },
+          { target: "Dark Horse CPAs", reason: "National distributed platform behind local-looking pages — ICP mismatch" },
+          { target: "Randolph Business Resources", reason: "40+ staff outsourced platform — exceeds the solo–~20 ICP" }
+        ]
+      },
       pains: [
         { name: "Missed calls, worst in tax season → lost clients", econ: "Client ~$1.5K–$5K/yr · ~$5K–$15K/yr+ (est.)", fix: "AI answers 24/7, qualifies, books the consult" },
         { name: "Client onboarding doc chase (PBC lists)", econ: "~2–5 hrs/client of back-and-forth; weeks of delay", fix: "AI requests, chases, and collects documents on a schedule" },
         { name: "No-shows / slow lead response", econ: "Lost billable slots; speed-to-lead loses clients", fix: "Reminders + instant inbound-lead booking" }
       ],
       agents: [
-        { n: 1, name: "Orchestrator", status: "configured", note: "config.md + skin.md ready" },
-        { n: 2, name: "Research + Leads", status: "queued", note: "Run web/Apollo sourcing" },
-        { n: 3, name: "Pain Diagnosis (gate)", status: "queued", note: "Gate runs at sourcing" },
-        { n: 4, name: "Loom script", status: "queued", note: "Lead with season-spike pain" },
-        { n: 5, name: "Gamma deck", status: "queued", note: "Re-skin generic deck" },
-        { n: 6, name: "Warm outreach", status: "queued", note: "Referral / bank networks" },
-        { n: 7, name: "Cold outreach", status: "queued", note: "Time around pre-season" },
-        { n: 8, name: "Paid ads", status: "queued", note: "Viable seasonally once gate met" },
-        { n: 9, name: "Book the call", status: "queued", money: true, note: "Same-week, live" },
-        { n: 10, name: "Results & proof", status: "queued", note: "Hours saved + recovered clients" },
-        { n: 11, name: "Testimonial", status: "queued", note: "Result-led + permission" },
-        { n: 12, name: "Convert", status: "queued", money: true, note: "Setup + MRR on convert" }
+        { n: 1, name: "Orchestrator", status: "done", note: "Plan + pain-gate audit" },
+        { n: 2, name: "Research + Leads", status: "done", note: "27 real firms, 6 metros (web-sourced)" },
+        { n: 3, name: "Pain Diagnosis (gate)", status: "done", note: "22 proceed / 5 halt" },
+        { n: 4, name: "Loom script", status: "done", note: "Template + 2 (call-spike, doc-chase)" },
+        { n: 5, name: "Gamma deck", status: "done", note: "Prompt + generic ready" },
+        { n: 6, name: "Warm outreach", status: "ready", note: "Banker / advisor / CPA-society ACA" },
+        { n: 7, name: "Cold outreach", status: "ready", note: "Season-timed 5-touch sequences" },
+        { n: 8, name: "Paid ads", status: "gated", note: "Hold until 2 clients (seasonally flighted)" },
+        { n: 9, name: "Book the call", status: "ready", money: true, note: "0 booked — awaiting first reply" },
+        { n: 10, name: "Results & proof", status: "blocked", note: "Needs a live pilot" },
+        { n: 11, name: "Testimonial", status: "blocked", note: "Needs a win" },
+        { n: 12, name: "Convert", status: "blocked", money: true, note: "Needs a pilot at day 7–12" }
       ],
-      leadsNote: "Configured — sourcing queued. Unique wedges: tax-season call spikes + the document chase (PBC lists). Closes via calls/ legal/financial skin.",
+      topLeads: [
+        { target: "Lowy's Tax Planning & Accounting", metro: "Phoenix", pain: "$2,500–$6,000", score: 91 },
+        { target: "Tanya L. Stokes, CPA", metro: "Austin", pain: "$1,000–$3,000", score: 90 },
+        { target: "Evan Hutcheson, CPA", metro: "Nashville", pain: "$1,000–$3,000", score: 90 },
+        { target: "Matthew Schlanger, CPA", metro: "Denver", pain: "$1,000–$3,000", score: 89 },
+        { target: "Hemingway & Buchanan, CPA", metro: "Austin", pain: "$1,500–$4,000", score: 89 },
+        { target: "Louis Haskel, CPA", metro: "Tampa", pain: "$1,000–$3,000", score: 89 }
+      ],
       artifacts: [
-        { label: "config.md", href: "engine/accounting/config.md" },
-        { label: "skin.md (pains, guardrails)", href: "engine/accounting/skin.md" }
+        { label: "leads.csv (27)", href: "engine/accounting/leads.csv" },
+        { label: "pain_briefs.md", href: "engine/accounting/pain_briefs.md" },
+        { label: "outreach_cold.md", href: "engine/accounting/outreach_cold.md" },
+        { label: "looms/", href: "engine/accounting/looms/" },
+        { label: "run_plan.md", href: "engine/accounting/run_plan.md" },
+        { label: "config.md", href: "engine/accounting/config.md" }
       ]
     },
 
