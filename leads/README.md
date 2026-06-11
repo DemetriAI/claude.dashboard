@@ -161,3 +161,9 @@ A weekly schedule is configured in `.github/workflows/lead-pipeline.yml`
 - Test it any time with **Actions → lead-pipeline → Run workflow**.
 
 _Reproduce anytime:_ `cd leads && python3 score_leads.py`
+
+## Handing this off
+
+To transfer this engine to **Cowork** (Apollo.io + Gmail + Notion + Drive + Gamma
+tooling) for verified enrichment, expansion, and outreach staging, see
+[`COWORK_HANDOFF.md`](COWORK_HANDOFF.md) — it contains a ready-to-paste prompt.
