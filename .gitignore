@@ -12,3 +12,7 @@ engine/**/_private/*
 .DS_Store
 *.swp
 *~
+
+# Python build cruft (from engine/tools/*.py)
+__pycache__/
+*.pyc
