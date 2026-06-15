@@ -13,6 +13,6 @@ engine/**/_private/*
 *.swp
 *~
 
-# Python build cruft (from engine/tools/*.py)
+# Python bytecode / build cruft (from engine/tools/*.py)
 __pycache__/
 *.pyc

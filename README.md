@@ -18,6 +18,24 @@ plus law, accounting, and hedge_fund (re-skins ready: `config.md` + `skin.md`, s
 pipeline is mirrored to a **live Notion CRM**, and the engine feeds booked calls straight into the
 `calls/` system below.
 
+## `dashboard/` — interactive prep-doc generator (web UI)
+
+Generate prep docs interactively — fill the form, watch the doc render live, then **Download .md** / **Copy** / **Save to `calls/`**.
+
+```bash
+python3 dashboard/server.py          # -> http://127.0.0.1:8765
+# PORT=9000 python3 dashboard/server.py
+```
+
+- Pick a vertical → the doc regenerates with the right terminology + compliance framing (BAA for healthcare; confidentiality/NDA otherwise).
+- Type teardown numbers + pricing → every `[[FILL]]` resolves live in the preview.
+- Stdlib `http.server` only (**no `pip`**); it shells out to `calls/_new-prep.sh`, so the template stays the single source of truth.
+
+| File | What it is |
+|---|---|
+| [`dashboard/server.py`](dashboard/server.py) | Zero-dependency server + JSON API (generate / examples / save) |
+| [`dashboard/index.html`](dashboard/index.html) | Single-file UI: form, live markdown preview, download/copy/save |
+
 ## `calls/` — discovery-call prep system
 
 Everything needed to walk into a discovery call and close a **14-day free pilot** with a **pre-signed setup-fee + MRR agreement** (charge triggers on pilot → production).
