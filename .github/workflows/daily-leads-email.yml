@@ -16,6 +16,9 @@ on:
 jobs:
   email-leads:
     runs-on: ubuntu-latest
+    env:
+      GHL_API_TOKEN: ${{ secrets.GHL_API_TOKEN }}
+      GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
     steps:
       - uses: actions/checkout@v4
 
@@ -56,3 +59,7 @@ jobs:
 
             Verticals: optometry, law, accounting. The two numbers that matter: booked calls + MRR.
           attachments: engine/exports/all_leads.csv,engine/exports/ghl_contacts.csv
+
+      - name: Sync PROCEED leads to GoHighLevel (skips unless GHL secrets are set)
+        if: steps.gate.outputs.run == 'true' && env.GHL_API_TOKEN != ''
+        run: python3 engine/tools/ghl_sync.py

@@ -40,9 +40,14 @@ trigger ignores the time gate and sends right away).
 - **Now (no credentials):** in GHL, **Contacts → Import**, upload `ghl_contacts.csv`, and map the
   columns (Business Name, Website, Tags, and the rest as custom fields). Tags arrive as
   `PremierConnect;<vertical>;<metro>` so you can build smart lists + automations per vertical.
-- **Auto-sync (optional):** drop a GHL **Private Integration Token** into a repo secret and I'll add a
-  step to this workflow that upserts the PROCEED contacts into GHL via the API v2 every morning — no
-  manual import.
+- **Auto-sync (built — add 2 secrets):** the daily workflow upserts PROCEED contacts into GHL via the
+  API v2 using `engine/tools/ghl_sync.py`. It is **idempotent** — it dedupes by business name + website,
+  so re-runs will not create duplicate contacts. Add two repo secrets:
+  - `GHL_API_TOKEN` = your GoHighLevel **Private Integration Token** (GHL → Settings → Private Integrations)
+  - `GHL_LOCATION_ID` = your GHL **Location ID** (GHL → Settings → Business Info)
+
+  The GHL step auto-skips until both are present. Caveat: if your GHL location requires email/phone to
+  create a contact, enrich those first (Apollo upgrade or inside GHL) — the engine keeps PII out by design.
 
 > Heads-up: contact PII (emails/phones) was deliberately kept out of the engine, so GHL contacts import
 > by **business name + website**. Enrich phone/email in GHL, or upgrade Apollo and I'll fill them in.
