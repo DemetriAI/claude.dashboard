@@ -3,7 +3,7 @@
    (Numbers mirror engine/optometry/leads.csv, pain_briefs.md, run_plan.md, and the connector runs.) */
 window.ENGINE_DATA = {
   generatedAt: "2026-06-11",
-  order: ["optometry", "law", "accounting", "hedge_fund"],
+  order: ["optometry", "law", "accounting", "real_estate", "hedge_fund"],
   verticals: {
 
     optometry: {
@@ -171,6 +171,64 @@ window.ENGINE_DATA = {
         { label: "looms/", href: "engine/accounting/looms/" },
         { label: "run_plan.md", href: "engine/accounting/run_plan.md" },
         { label: "config.md", href: "engine/accounting/config.md" }
+      ]
+    },
+
+    real_estate: {
+      label: "Real Estate",
+      status: "ready",
+      statusColor: "#28c081",
+      buyer: "Owner-operator (agent / team lead who owns the phone + ad budget)",
+      region: "US — 6 seed metros",
+      offLimits: "Fair Housing — AI never screens/steers on protected classes; intake + scheduling only",
+      kpis: { targets: 25, metros: 6, proceed: 20, halt: 5, booked: 0, pilots: 0, mrr: 0 },
+      gate: {
+        proceed: 20, halt: 5,
+        haltList: [
+          { target: "Cain Realty Group (KW)", reason: "Large Keller Williams franchise team with systems/staff + central lead routing — speed-to-lead already solved" },
+          { target: "Bernie Gallerani Real Estate", reason: "34-employee #1 TN mega-team that staffs Inside Sales Agents (appointment setters)" },
+          { target: "Andy Bovender Team (Compass)", reason: "42-person, $2B multi-market mega-team with full support + central routing" },
+          { target: "Jessica Northrop Group (Compass)", reason: "Top 0.5% luxury team, $950M lifetime, dedicated support staff + structured intake" },
+          { target: "The Duncan Duo Team (LPT)", reason: "Media-driven mega-team with staffed cash-offer / guaranteed-sale intake" }
+        ]
+      },
+      pains: [
+        { name: "Slow speed-to-lead on PAID leads → ad spend leaks", econ: "$6K–$15K/deal commission; portal/Meta leads die in minutes; ~$3K–$14K/mo at risk (est.)", fix: "AI answers + qualifies + books the showing in <1 min, 24/7" },
+        { name: "Missed calls while showing / after hours", econ: "Buyer calls the next sign", fix: "AI answers every call, books, texts the agent the hot ones" },
+        { name: "No follow-up on aged paid leads", econ: "A CRM full of bought leads never reworked", fix: "AI reactivation campaign to the old lead DB" },
+        { name: "Showing no-shows", econ: "Wasted drive time + lost slots", fix: "Automated reminders + easy reschedule" }
+      ],
+      agents: [
+        { n: 1, name: "Orchestrator", status: "done", note: "Config + skin + pain-gate audit" },
+        { n: 2, name: "Research + Leads", status: "done", note: "20 PROCEED across 6 metros (web-verified; Apify scales + confirms live ads)" },
+        { n: 3, name: "Pain Diagnosis (gate)", status: "done", note: "20 proceed / 5 halt (HALT = staffed ISA / mega-teams)" },
+        { n: 4, name: "Loom script", status: "ready", note: "Ad-spend-leak teardown (template pattern)" },
+        { n: 5, name: "Gamma deck", status: "queued", note: "Generate per top target" },
+        { n: 6, name: "Warm outreach", status: "ready", note: "Lender / title / mortgage-broker ACA" },
+        { n: 7, name: "Cold outreach", status: "ready", note: "5×25/day via Instantly — ad-spend-leak sequence" },
+        { n: 8, name: "Paid ads", status: "gated", note: "Hold until 2 clients — then dogfood on own ad leads" },
+        { n: 9, name: "Book the call", status: "ready", money: true, note: "0 booked — awaiting first reply" },
+        { n: 10, name: "Results & proof", status: "blocked", note: "Needs a live pilot" },
+        { n: 11, name: "Testimonial", status: "blocked", note: "Needs a win" },
+        { n: 12, name: "Convert", status: "blocked", money: true, note: "Needs a pilot at day 7–12" }
+      ],
+      topLeads: [
+        { target: "Peter Hauben — Denver Realty", metro: "Denver", pain: "$5,000–$14,000", score: 92 },
+        { target: "Liz McDermott — AZ Dream Home", metro: "Phoenix", pain: "$5,000–$13,000", score: 90 },
+        { target: "Asad Shaikh — Your Tampa Expert", metro: "Tampa", pain: "$5,000–$13,000", score: 89 },
+        { target: "Paul Welden — Buyers Agent PHX", metro: "Phoenix", pain: "$4,000–$12,000", score: 89 },
+        { target: "Baemayr Realty Group", metro: "Austin", pain: "$4,000–$12,000", score: 88 },
+        { target: "Sam Gray Real Estate", metro: "Nashville", pain: "$5,000–$13,000", score: 88 },
+        { target: "Tampa Bay Elite Homes", metro: "Tampa", pain: "$4,000–$11,000", score: 88 },
+        { target: "Ashley Jackson — Mueller Residential", metro: "Austin", pain: "$4,000–$11,000", score: 87 }
+      ],
+      artifacts: [
+        { label: "leads.csv (25)", href: "engine/real_estate/leads.csv" },
+        { label: "pain_briefs.md", href: "engine/real_estate/pain_briefs.md" },
+        { label: "outreach_cold.md", href: "engine/real_estate/outreach_cold.md" },
+        { label: "SENDING.md (5×25 cadence)", href: "engine/SENDING.md" },
+        { label: "run_plan.md", href: "engine/real_estate/run_plan.md" },
+        { label: "config.md", href: "engine/real_estate/config.md" }
       ]
     },
 

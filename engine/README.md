@@ -14,7 +14,7 @@ block — you swap the config, not the engine. This is the bread-and-butter mach
 | Metric | Now |
 |---|---|
 | Active vertical | **optometry** (US — 6 seed metros) |
-| Verticals configured | **4** — optometry (live) · law · accounting · hedge_fund (re-skins ready) |
+| Verticals configured | **5** — optometry (live) · law · accounting · real_estate (20 PROCEED) · hedge_fund |
 | Targets sourced | **42** real, web-verified |
 | Pain gate | **37 PROCEED · 5 HALT** |
 | Looms ready | 3 worked + template |
@@ -32,7 +32,7 @@ block — you swap the config, not the engine. This is the bread-and-butter mach
 > them move.
 
 ### 🔗 Live artifacts (generated this run)
-- **UI dashboard:** open [`../index.html`](../index.html) — toggle Optometry / Law / Accounting / Hedge Fund.
+- **UI dashboard:** open [`../index.html`](../index.html) — toggle Optometry / Law / Accounting / Real Estate / Hedge Fund.
 - **Gamma decks (live):** [Round Rock Eyes](https://gamma.app/docs/rda8u0bnlrxh5s3) · [True Eye Care](https://gamma.app/docs/eakkn83zi78d6cg).
 - **Notion CRM (live):** [PremierConnect AI — Pipeline](https://app.notion.com/p/3772adc44a2481fea855cc36a692ab20) — all 42 leads synced; filter `Stage` to watch the money events.
 - **Apollo:** people **and** company search are paywalled on the current plan (0 credits charged). The engine sources real leads via the web path until the plan is upgraded; the saved query is in `optometry/leads.README.md`.
@@ -51,9 +51,11 @@ claude.dashboard/
 └── engine/
     ├── README.md        ← you are here (the text control-center)
     ├── MAINTENANCE.md   ← the weekly run-of-show (do this every week)
+    ├── SENDING.md       ← cold-email cadence playbook (5×25/day via Instantly)
     ├── optometry/       ← LIVE run — fully populated (children below)
     ├── law/             ← re-skin: config.md + skin.md (sourcing queued)
     ├── accounting/      ← re-skin: config.md + skin.md (sourcing queued)
+    ├── real_estate/     ← agents already running Meta/Google ads (Apify→Apollo→Instantly); 20 PROCEED / 6 metros
     └── hedge-fund/      ← re-skin: config.md + skin.md (warm-intro only — different rules)
 ```
 
