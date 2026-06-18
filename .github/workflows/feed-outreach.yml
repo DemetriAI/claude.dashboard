@@ -1,0 +1,37 @@
+name: Feed outreach (Apify → Apollo → Instantly)
+
+# Sources ad-running real-estate advertisers (Apify), enriches verified emails (Apollo), and feeds them
+# into the Instantly campaign that sends the 5×25/day cadence (see engine/SENDING.md). The actual timed
+# sending is handled continuously by Instantly — NOT here.
+#
+# Every step auto-skips unless its secret is set, so this is safe to merge before anything is configured.
+# Scheduled workflows only run from the DEFAULT branch — merge to activate.
+
+on:
+  schedule:
+    - cron: '0 12 * * 1'   # Mondays 12:00 UTC — refresh the campaign feed weekly
+  workflow_dispatch: {}     # manual "Run workflow" button
+
+jobs:
+  feed:
+    runs-on: ubuntu-latest
+    env:
+      APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+      APIFY_FB_ADS_ACTOR: ${{ secrets.APIFY_FB_ADS_ACTOR }}
+      APOLLO_API_KEY: ${{ secrets.APOLLO_API_KEY }}
+      INSTANTLY_API_KEY: ${{ secrets.INSTANTLY_API_KEY }}
+      INSTANTLY_CAMPAIGN_ID: ${{ secrets.INSTANTLY_CAMPAIGN_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Source ad-running advertisers (Apify)
+        if: env.APIFY_TOKEN != ''
+        run: python3 engine/tools/apify_sourcer.py
+
+      - name: Enrich verified emails (Apollo)
+        if: env.APOLLO_API_KEY != ''
+        run: python3 engine/tools/apollo_enrich.py
+
+      - name: Push verified leads into Instantly campaign
+        if: env.INSTANTLY_API_KEY != '' && env.INSTANTLY_CAMPAIGN_ID != ''
+        run: python3 engine/tools/instantly_push.py
