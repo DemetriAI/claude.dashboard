@@ -41,9 +41,14 @@ def run_actor(payload):
 def main():
     seen, rows = set(), []
     for metro in METROS:
-        # Input keys differ between Ad Library actors; we send the common ones so most actors accept it.
-        payload = {"searchTerms": [f"{QUERY} {metro}"], "search": f"{QUERY} {metro}",
-                   "country": "US", "adActiveStatus": "active", "maxItems": 50}
+        # Input keys differ between Ad Library actors; send a real Ad Library search URL (the most common
+        # input) plus search-term/count variants so the major actors accept the payload as-is.
+        ad_lib_url = ("https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=US"
+                      f"&q={urllib.parse.quote(QUERY + ' ' + metro)}&search_type=keyword_unordered&media_type=all")
+        payload = {"urls": [ad_lib_url], "startUrls": [{"url": ad_lib_url}],
+                   "searchTerms": [f"{QUERY} {metro}"], "search": f"{QUERY} {metro}",
+                   "country": "US", "adActiveStatus": "active", "activeStatus": "active",
+                   "count": 50, "resultsLimit": 50, "maxItems": 50}
         try:
             items = run_actor(payload)
         except urllib.error.HTTPError as e:
