@@ -58,6 +58,8 @@ code{background:#0a1020;border:1px solid var(--line);padding:1px 6px;border-radi
 .hero .badge-status{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px}
 .hero .cfg{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:13px}
 .hero .cfg b{color:var(--txt);font-weight:600}
+.hero .pitch{flex-basis:100%;width:100%;margin:2px 0 0;font-size:15px;font-weight:600;
+  color:var(--txt);border-left:3px solid var(--accent);padding:4px 0 4px 12px;max-width:760px}
 
 /* KPI cards */
 .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}

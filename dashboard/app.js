@@ -71,6 +71,7 @@
     html += '<div class="hero">';
     html += '<h2 class="vname">' + esc(v.label) + "</h2>";
     html += statusBadge(v.status);
+    if (v.pitch) html += '<p class="pitch">' + esc(v.pitch) + "</p>";
     html += '<div class="cfg">' +
       "<span><b>Buyer:</b> " + esc(v.buyer) + "</span>" +
       "<span><b>Region:</b> " + esc(v.region) + "</span>" +

@@ -176,6 +176,7 @@ window.ENGINE_DATA = {
 
     real_estate: {
       label: "Real Estate",
+      pitch: "I don't sell you more leads — I make the ones you already paid for stop dying in voicemail. Same ad spend, more closings.",
       status: "ready",
       statusColor: "#28c081",
       buyer: "Owner-operator (agent / team lead who owns the phone + ad budget)",

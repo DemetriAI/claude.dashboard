@@ -1,5 +1,9 @@
 # Cold Outreach — real_estate (Agent 7)
 
+> **The one-liner (positioning):** *"I don't sell you more leads — I make the ones you already paid for
+> stop dying in voicemail. Same ad spend, more closings."* This is the CAC-reducer frame: we don't add to
+> their budget, we recover the spend that's already leaking. Every touch below is a variation on it.
+
 Lead-with-pain, artifact-led, and **opening on their own ad spend** — the unique wedge here. Every
 message names the leads they're *already paying for* that ring out to voicemail, attaches a personalized
 **Loom**, has **one CTA** (book 15 min), and carries the **Fair-Housing + no-advice guardrail**. Sent
