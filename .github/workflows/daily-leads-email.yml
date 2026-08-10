@@ -1,0 +1,65 @@
+name: Daily leads email
+
+# Emails the lead CSVs to contact@premierconnectai.com at 08:00 America/Chicago.
+# GitHub cron is UTC and does NOT follow DST, so we fire at both 13:00 and 14:00 UTC
+# and a gate step lets only the one that equals 08:00 in Chicago proceed.
+#
+# NOTE: scheduled workflows only run from the repository's DEFAULT branch. This will
+# not fire on a feature branch — merge it to the default branch to activate.
+
+on:
+  schedule:
+    - cron: '0 13 * * *'   # 08:00 Chicago during CDT (UTC-5)
+    - cron: '0 14 * * *'   # 08:00 Chicago during CST (UTC-6)
+  workflow_dispatch: {}     # manual "Run workflow" button for testing
+
+jobs:
+  email-leads:
+    runs-on: ubuntu-latest
+    env:
+      GHL_API_TOKEN: ${{ secrets.GHL_API_TOKEN }}
+      GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Gate to 08:00 America/Chicago (DST-safe)
+        id: gate
+        run: |
+          HOUR="$(TZ=America/Chicago date +%H)"
+          echo "today=$(TZ=America/Chicago date +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$HOUR" != "08" ]; then
+            echo "Chicago hour is $HOUR (not 08) — the other cron will handle today. Skipping."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build CSV exports
+        if: steps.gate.outputs.run == 'true'
+        run: python3 engine/tools/build_exports.py
+
+      - name: Email the CSVs
+        if: steps.gate.outputs.run == 'true'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          from: PremierConnect Engine <${{ secrets.MAIL_USERNAME }}>
+          to: contact@premierconnectai.com
+          subject: PremierConnect leads — ${{ steps.gate.outputs.today }}
+          body: |
+            Daily lead export from the PremierConnect engine.
+
+            Attached:
+              - all_leads.csv     : every target across all verticals (PROCEED + HALT)
+              - ghl_contacts.csv  : PROCEED leads only, formatted for GoHighLevel import
+
+            Verticals: optometry, law, accounting. The two numbers that matter: booked calls + MRR.
+          attachments: engine/exports/all_leads.csv,engine/exports/ghl_contacts.csv
+
+      - name: Sync PROCEED leads to GoHighLevel (skips unless GHL secrets are set)
+        if: steps.gate.outputs.run == 'true' && env.GHL_API_TOKEN != ''
+        run: python3 engine/tools/ghl_sync.py
