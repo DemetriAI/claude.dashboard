@@ -3,11 +3,16 @@
 teardowns/
 calls/teardowns/
 
+# Engine: enriched contact exports (emails/phones) are PII — keep out of git.
+# The _private/ folder stays in the repo (its README is tracked); its contents do not.
+engine/**/_private/*
+!engine/**/_private/README.md
+
 # OS / editor cruft
 .DS_Store
 *.swp
 *~
 
-# Python bytecode
+# Python bytecode / build cruft (from engine/tools/*.py)
 __pycache__/
 *.pyc

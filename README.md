@@ -2,7 +2,23 @@
 
 Sales operations workspace for **PremierConnect AI** — the done-for-you AI front desk that answers every call and books it.
 
-## Dashboard (web UI)
+**▶ Open [`index.html`](index.html)** for the live UI dashboard — toggle across all four industries
+(**Optometry · Law · Accounting · Hedge Fund**), each with its 12 agents, pain gate, KPIs, top targets,
+and artifacts (including the live Gamma decks). No build step — it opens in any browser.
+
+## `engine/` — the outreach & outcome engine (start here)
+
+The full go-to-market machine: **12 agents** that run research → diagnose pain → Loom → Gamma →
+outreach → book → prove → testimonial → convert. Re-skinnable per vertical by swapping one config
+block. **Open [`engine/README.md`](engine/README.md) — it's the control-center dashboard and always
+tells you where everything is at.** Weekly cadence lives in [`engine/MAINTENANCE.md`](engine/MAINTENANCE.md).
+
+**Four verticals configured:** optometry (LIVE — 42 real targets, 37 PROCEED, 2 live Gamma decks),
+plus law, accounting, and hedge_fund (re-skins ready: `config.md` + `skin.md`, sourcing queued). The
+pipeline is mirrored to a **live Notion CRM**, and the engine feeds booked calls straight into the
+`calls/` system below.
+
+## `dashboard/` — interactive prep-doc generator (web UI)
 
 Generate prep docs interactively — fill the form, watch the doc render live, then **Download .md** / **Copy** / **Save to `calls/`**.
 
